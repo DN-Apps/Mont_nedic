@@ -1,0 +1,140 @@
+import React, { useState } from "react";
+import Bad from "../assets/Bad.jpg";
+import Kueche from "../assets/Kueche.jpg";
+import Zimmer1 from "../assets/zimmer2.jpeg";
+import Zimmer2 from "../assets/Zimmer1.jpg";
+import Flur1 from "../assets/flur.jpeg";
+import Flur2 from "../assets/flurRechts.jpeg";
+import Treppe from "../assets/entry.jpeg";
+import Front from "../assets/home_new.jpeg"
+import "./Zimmer.css";
+
+function Zimmer() {
+    const [activeImage, setActiveImage] = useState(null);
+
+    const points = [
+        { id: 1, x: 180, y: 450, label: "Treppe", image: Treppe },
+        { id: 2, x: 220, y: 250, label: "Flur", image: Flur1 },
+        { id: 3, x: 290, y: 250, label: "Flur", image: Flur2 },
+        { id: 4, x: 250, y: 100, label: "Bad", image: Bad },
+        { id: 5, x: 20, y: 350, label: "Zimmer", image: Zimmer2 },
+        { id: 6, x: 450, y: 100, label: "Küche", image: Kueche },
+        { id: 7, x: 650, y: 100, label: "Zimmer", image: Zimmer1 },
+    ];
+
+    const handlePointClick = (point) => {
+        setActiveImage(point.image);
+    };
+
+    return (
+        <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+            {/* Linke Seite: Grundriss */}
+            <div style={{ flex: 1, borderRight: "1px solid #ccc", padding: "10px", overflow: "hidden" }}>
+                <h2 style={{ textAlign: "center" }}>Wohnungsgrundriss</h2>
+                <svg
+                    width="100%"
+                    height="100%"
+                    viewBox="-100 -50 900 600"
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{ border: "1px solid #000" }}
+                >
+                    {/* Rechtecke und Beschriftungen */}
+                    <rect x="-80" y="10" width="200" height="210" fill="#e8f5e9" stroke="#81c784" />
+                    <text x="10" y="30" fontSize="12" fill="#1565c0">Zimmer</text>
+
+                    <rect x="130" y="10" width="240" height="140" fill="#e3f2fd" stroke="#90caf9" />
+                    <text x="230" y="30" fontSize="12" fill="#1565c0">Bad</text>
+
+                    <rect x="380" y="10" width="160" height="140" fill="#e3f2fd" stroke="#90caf9" />
+                    <text x="450" y="30" fontSize="12" fill="#2e7d32">Küche</text>
+
+                    <rect x="550" y="10" width="230" height="230" fill="#e8f5e9" stroke="#81c784" />
+                    <text x="570" y="30" fontSize="12" fill="#2e7d32">Zimmer</text>
+
+                    <rect x="-80" y="230" width="200" height="260" fill="#e8f5e9" stroke="#81c784" />
+                    <text x="-70" y="320" fontSize="12" fill="#1565c0">Zimmer</text>
+
+                    <rect x="130" y="310" width="100" height="180" fill="#fff3e0" stroke="#ffcc80" />
+                    <text x="140" y="330" fontSize="12" fill="#ef6c00">Treppenhaus</text>
+
+                    <rect x="380" y="250" width="400" height="240" fill="#fbe9e7" stroke="#ffab91" />
+                    <text x="550" y="270" fontSize="12" fill="#d84315">Wohnzimmer</text>
+
+                    {/* Interaktive Punkte */}
+                    {points.map((point) => (
+                        <circle
+                            key={point.id}
+                            cx={point.x}
+                            cy={point.y}
+                            r="10"
+                            fill="red"
+                            onClick={() => handlePointClick(point)}
+                            style={{ cursor: "pointer" }}
+                        />
+                    ))}
+                </svg>
+            </div>
+
+            {/* Rechte Seite: Galerie */}
+            <div style={{ flex: 1, padding: "20px", overflowY: "auto" }}>
+                <h2 style={{ textAlign: "center" }}>Galerie</h2>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
+                    {points.map((point) => (
+                        <img
+                            key={point.id}
+                            src={point.image}
+                            alt={point.label}
+                            style={{
+                                width: "100px",
+                                height: "100px",
+                                objectFit: "cover",
+                                cursor: "pointer",
+                            }}
+                            onClick={() => setActiveImage(point.image)}
+                        />
+                    ))}
+                </div>
+                {/* Permanentes Bild unter der Galerie */}
+                <div style={{ marginTop: "20px", textAlign: "center" }}>
+                    <img
+                        src={Front}
+                        alt="Front"
+                        style={{
+                            width: "100%",
+                            maxWidth: "35vw",
+                            height: "auto",
+                            borderRadius: "10px",
+                        }}
+                    />
+                </div>
+                {activeImage && (
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100vw",
+                            height: "100vh",
+                            backgroundColor: "rgba(0,0,0,0.8)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            zIndex: 1000,
+                        }}
+                        onClick={() => setActiveImage(null)}
+                    >
+                        <img
+                            src={activeImage}
+                            alt="Vergrößertes Bild"
+                            style={{ maxHeight: "80%", maxWidth: "80%", borderRadius: "10px" }}
+                        />
+
+                    </div>
+                )}
+            </div>
+        </div>
+
+    );
+}
+
+export default Zimmer;

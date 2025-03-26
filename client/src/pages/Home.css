@@ -1,0 +1,155 @@
+body,
+html {
+  padding: 0;
+  overflow: hidden;
+}
+
+.home-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Zwei gleich große Spalten */
+  grid-template-rows: 1fr 1fr; /* Zwei gleich große Reihen */
+  height: 100vh; /* Volle Höhe des Bildschirms */
+  width: 100vw; /* Volle Breite des Bildschirms */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  margin-bottom: 3vh;
+}
+
+.home-section {
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Bereichsstyling */
+.top-left {
+  background-color: #f8f9fa;
+  text-align: center;
+  display: flex; /* Flexbox */
+  flex-direction: column; /* Elemente untereinander anordnen */
+  justify-content: center; /* Zentriert in der vertikalen Achse */
+  align-items: center; /* Zentriert in der horizontalen Achse */
+}
+
+.top-left h1 {
+  margin-bottom: 10px; /* Abstand zwischen Überschrift und Text */
+  font-size: 2rem; /* Optionale Anpassung der Schriftgröße */
+  color: #333; /* Optionale Textfarbe */
+}
+
+.top-left h4 {
+  margin-top: 0; /* Kein zusätzlicher Abstand nach oben */
+  font-size: 1.2rem; /* Optionale Schriftgröße */
+  color: #555; /* Optionale Textfarbe */
+  line-height: 1.5; /* Verbessert die Lesbarkeit */
+}
+
+/* Icons und Beschriftungen */
+.amenities {
+  display: flex;
+  flex-wrap: wrap; /* Zeilenumbruch für mehrere Elemente */
+  justify-content: center; /* Zentriert die Icons */
+  margin-top: 20px;
+  gap: 15px; /* Abstand zwischen den Elementen */
+}
+
+.amenity {
+  display: flex;
+  align-items: center;
+  font-size: 1rem; /* Textgröße */
+  color: #333; /* Textfarbe */
+  margin: 5px 10px; /* Abstand zwischen Icons */
+}
+
+.amenity i {
+  margin-right: 8px; /* Abstand zwischen Icon und Text */
+  font-size: 1.2rem; /* Icon-Größe */
+  color: #007bff; /* Icon-Farbe */
+}
+
+.top-right {
+  background-color: #e9ecef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.bottom-left {
+  background-color: #dee2e6;
+  margin-left: 2.3vw;
+}
+
+.bottom-right {
+  background-color: #ced4da;
+  flex-direction: column;
+}
+
+.bottom-right p {
+  margin-top: 0;
+}
+.bottom-right h2 {
+  margin-top: 0;
+}
+
+.bottom-right img {
+  border: 2px solid black;
+  border-radius: 50%;
+}
+
+.slideshow {
+  position: relative;
+  width: 100%; /* Nimmt die volle Breite ein */
+  height: 100%; /* Nimmt die volle Höhe ein */
+  overflow: hidden;
+}
+
+.slideshow img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* Bild passt sich an die Breite des Containers an */
+  height: 100%; /* Bild passt sich an die Höhe des Containers an */
+  object-fit: cover; /* Keine Verzerrung oder Abschneiden */
+  opacity: 0; /* Anfangs unsichtbar */
+  transition: opacity 1s; /* Weicher Übergang */
+  animation: fade 25s infinite; /* Animation dauert insgesamt 25 Sekunden */
+}
+
+/* Bilder erscheinen nacheinander */
+.slideshow img:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.slideshow img:nth-child(2) {
+  animation-delay: 5s;
+}
+
+.slideshow img:nth-child(3) {
+  animation-delay: 10s;
+}
+
+.slideshow img:nth-child(4) {
+  animation-delay: 15s;
+}
+
+.slideshow img:nth-child(5) {
+  animation-delay: 20s;
+}
+
+/* Keyframes für Fade-In und Fade-Out */
+@keyframes fade {
+  0%,
+  20% {
+    opacity: 1; /* Bild ist sichtbar */
+  }
+  25%,
+  100% {
+    opacity: 0; /* Bild wird unsichtbar */
+  }
+}

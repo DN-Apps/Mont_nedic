@@ -1,0 +1,13 @@
+# Node.js (Backend)
+server/node_modules/
+server/.env
+
+# React (Frontend)
+client/node_modules/
+client/.env
+client/build/
+
+# Logs & Betriebssystem-Dateien
+*.log
+.DS_Store
+Thumbs.db

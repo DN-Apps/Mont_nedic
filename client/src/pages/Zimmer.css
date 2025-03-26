@@ -1,0 +1,15 @@
+img {
+  transition: transform 0.3s, border 0.3s;
+}
+
+img:hover {
+  transform: scale(1.05);
+  border-color: #007bff;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
