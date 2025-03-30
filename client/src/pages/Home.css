@@ -1,6 +1,7 @@
 body,
 html {
   padding: 0;
+  margin: 0;
   overflow: hidden;
 }
 
@@ -13,7 +14,12 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  margin-bottom: 3vh;
+  transition: margin-top 0.3s ease-in-out; /* Sanfte Animation für Menü */
+}
+
+/* Dynamischer Abstand, falls Menü geöffnet ist */
+.home-container.menu-open {
+  margin-top: 150px; /* Abstand nach unten, wenn das Burger-Menü geöffnet ist */
 }
 
 .home-section {
@@ -30,46 +36,46 @@ html {
 .top-left {
   background-color: #f8f9fa;
   text-align: center;
-  display: flex; /* Flexbox */
-  flex-direction: column; /* Elemente untereinander anordnen */
-  justify-content: center; /* Zentriert in der vertikalen Achse */
-  align-items: center; /* Zentriert in der horizontalen Achse */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .top-left h1 {
-  margin-bottom: 10px; /* Abstand zwischen Überschrift und Text */
-  font-size: 2rem; /* Optionale Anpassung der Schriftgröße */
-  color: #333; /* Optionale Textfarbe */
+  margin-bottom: 10px;
+  font-size: 2rem;
+  color: #333;
 }
 
 .top-left h4 {
-  margin-top: 0; /* Kein zusätzlicher Abstand nach oben */
-  font-size: 1.2rem; /* Optionale Schriftgröße */
-  color: #555; /* Optionale Textfarbe */
-  line-height: 1.5; /* Verbessert die Lesbarkeit */
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #555;
+  line-height: 1.5;
 }
 
 /* Icons und Beschriftungen */
 .amenities {
   display: flex;
-  flex-wrap: wrap; /* Zeilenumbruch für mehrere Elemente */
-  justify-content: center; /* Zentriert die Icons */
+  flex-wrap: wrap;
+  justify-content: center;
   margin-top: 20px;
-  gap: 15px; /* Abstand zwischen den Elementen */
+  gap: 15px;
 }
 
 .amenity {
   display: flex;
   align-items: center;
-  font-size: 1rem; /* Textgröße */
-  color: #333; /* Textfarbe */
-  margin: 5px 10px; /* Abstand zwischen Icons */
+  font-size: 1rem;
+  color: #333;
+  margin: 5px 10px;
 }
 
 .amenity i {
-  margin-right: 8px; /* Abstand zwischen Icon und Text */
-  font-size: 1.2rem; /* Icon-Größe */
-  color: #007bff; /* Icon-Farbe */
+  margin-right: 8px;
+  font-size: 1.2rem;
+  color: #007bff;
 }
 
 .top-right {
@@ -93,6 +99,7 @@ html {
 .bottom-right p {
   margin-top: 0;
 }
+
 .bottom-right h2 {
   margin-top: 0;
 }
@@ -102,10 +109,11 @@ html {
   border-radius: 50%;
 }
 
+/* Slideshow */
 .slideshow {
   position: relative;
-  width: 100%; /* Nimmt die volle Breite ein */
-  height: 100%; /* Nimmt die volle Höhe ein */
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -113,12 +121,12 @@ html {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%; /* Bild passt sich an die Breite des Containers an */
-  height: 100%; /* Bild passt sich an die Höhe des Containers an */
-  object-fit: cover; /* Keine Verzerrung oder Abschneiden */
-  opacity: 0; /* Anfangs unsichtbar */
-  transition: opacity 1s; /* Weicher Übergang */
-  animation: fade 25s infinite; /* Animation dauert insgesamt 25 Sekunden */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s;
+  animation: fade 25s infinite;
 }
 
 /* Bilder erscheinen nacheinander */
@@ -146,10 +154,40 @@ html {
 @keyframes fade {
   0%,
   20% {
-    opacity: 1; /* Bild ist sichtbar */
+    opacity: 1;
   }
   25%,
   100% {
-    opacity: 0; /* Bild wird unsichtbar */
+    opacity: 0;
+  }
+}
+
+/* ============================= */
+/* Mobile-Optimierung            */
+/* ============================= */
+@media (max-width: 768px) {
+  .home-container {
+    grid-template-columns: 1fr; /* Eine Spalte */
+    grid-template-rows: auto; /* Automatische Höhen */
+    height: auto; /* Flexibles Layout */
+    margin-top: 50px; /* Abstand, damit Inhalte nicht überlappt werden */
+  }
+
+  /* Wenn das Menü geöffnet ist, verschiebt sich alles nach unten */
+  .home-container.menu-open {
+    margin-top: 200px;
+  }
+
+  .home-section {
+    width: 100%;
+    height: auto;
+  }
+
+  .top-left {
+    padding-top: 20px; /* Zusätzlicher Abstand für bessere Sichtbarkeit */
+  }
+
+  .bottom-left {
+    margin-left: 0;
   }
 }

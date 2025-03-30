@@ -13,3 +13,111 @@ svg {
   height: auto;
   max-height: 100%;
 }
+
+.zimmer-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Linke Seite: Grundriss */
+.grundriss-container {
+  flex: 1;
+  border-right: 1px solid #ccc;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.grundriss-container h2 {
+  text-align: center;
+}
+
+.grundriss-container svg {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #000;
+  display: block;
+}
+
+/* Rechte Seite: Galerie */
+.galerie-container {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.galerie-container h2 {
+  text-align: center;
+}
+
+.galerie-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.galerie-grid img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.permanentes-bild {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.permanentes-bild img {
+  width: 100%;
+  max-width: 35vw;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Vergrößertes Bild im Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay img {
+  max-height: 80%;
+  max-width: 80%;
+  border-radius: 10px;
+}
+
+/* ============================= */
+/* 📱 Mobile Ansicht             */
+/* ============================= */
+@media (max-width: 768px) {
+  .zimmer-container {
+    flex-direction: column; /* Stapelt Grundriss und Galerie untereinander */
+    height: auto;
+  }
+
+  .grundriss-container {
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+  }
+
+  .grundriss-container svg {
+    height: auto;
+  }
+
+  .permanentes-bild img {
+    max-width: 80vw; /* Größere Darstellung in der Mobile-Ansicht */
+  }
+}

@@ -14,13 +14,14 @@ body {
   background-color: #333;
   color: white;
   padding: 10px 0;
-  position: fixed; /* Das Menü bleibt oben fixiert */
-  top: 0; /* Positioniert es oben */
+  position: fixed;
+  top: 0;
   width: 100%;
   display: flex;
-  justify-content: center; /* Zentriert die Menüelemente */
+  justify-content: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* Sicherstellt, dass das Menü über anderen Inhalten liegt */
+  z-index: 1000;
+  height: 50px; /* Feste Höhe, um Platz für das Menü zu garantieren */
 }
 
 .menu {
@@ -43,73 +44,85 @@ body {
   color: #ffcc00;
 }
 
-.menu-item span {
-  margin-top: 5px;
-  font-size: 12px;
-}
-
-.menu-item svg {
-  font-size: 20px;
-}
-
 .auth-section {
-  margin-left: auto; /* Verschiebt den Button nach rechts */
+  margin-left: auto;
   display: flex;
   align-items: center;
 }
 
-.auth-button {
-  display: flex;
-  align-items: center;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-decoration: none;
+/* ============================= */
+/* Mobile-Ansicht (Burger-Menü)  */
+/* ============================= */
+@media (max-width: 768px) {
+  .burger-menu {
+    display: block;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+  }
+
+  .burger-menu div {
+    width: 30px;
+    height: 4px;
+    background-color: #007bff;
+    margin: 6px 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* Das Menü ist standardmäßig ausgeblendet */
+  .menu {
+    position: relative;
+    width: 100%;
+    background-color: #333;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  /* Wenn das Menü geöffnet ist */
+  .menu.open {
+    min-height: 300px; /* Dynamischer Platz für das Menü */
+    padding: 10px 0;
+    min-width: 100%;
+  }
+
+  /* Die .App bekommt zusätzlichen Abstand nach unten, wenn das Menü offen ist */
+  .App.menu-open {
+    margin-top: 200px; /* Schiebt den Inhalt nach unten */
+  }
+
+  /* Mobile Menüeinträge */
+  .menu-item {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .menu-item:hover {
+    background-color: #444;
+  }
 }
 
-.auth-button:hover {
-  background-color: #0056b3;
-}
+/* ============================= */
+/* Desktop-Ansicht               */
+/* ============================= */
+@media (min-width: 769px) {
+  .burger-menu {
+    display: none;
+  }
 
-.login-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  text-align: center;
-}
+  .menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: static; /* Standardposition */
+  }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-
-.login-button,
-.register-button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 5px;
-}
-
-.login-button:hover,
-.register-button:hover {
-  background-color: #0056b3;
+  .menu-item {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
 }

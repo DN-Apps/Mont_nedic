@@ -6,7 +6,7 @@ import Zimmer2 from "../assets/Zimmer1.jpg";
 import Flur1 from "../assets/flur.jpeg";
 import Flur2 from "../assets/flurRechts.jpeg";
 import Treppe from "../assets/entry.jpeg";
-import Front from "../assets/home_new.jpeg"
+import Front from "../assets/home_new.jpeg";
 import "./Zimmer.css";
 
 function Zimmer() {
@@ -27,16 +27,15 @@ function Zimmer() {
     };
 
     return (
-        <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+        <div className="zimmer-container">
             {/* Linke Seite: Grundriss */}
-            <div style={{ flex: 1, borderRight: "1px solid #ccc", padding: "10px", overflow: "hidden" }}>
-                <h2 style={{ textAlign: "center" }}>Wohnungsgrundriss</h2>
+            <div className="grundriss-container">
+                <h2>Wohnungsgrundriss</h2>
                 <svg
                     width="100%"
                     height="100%"
                     viewBox="-100 -50 900 600"
                     preserveAspectRatio="xMidYMid meet"
-                    style={{ border: "1px solid #000" }}
                 >
                     {/* Rechtecke und Beschriftungen */}
                     <rect x="-80" y="10" width="200" height="210" fill="#e8f5e9" stroke="#81c784" />
@@ -76,64 +75,31 @@ function Zimmer() {
             </div>
 
             {/* Rechte Seite: Galerie */}
-            <div style={{ flex: 1, padding: "20px", overflowY: "auto" }}>
-                <h2 style={{ textAlign: "center" }}>Galerie</h2>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
+            <div className="galerie-container">
+                <h2>Galerie</h2>
+                <div className="galerie-grid">
                     {points.map((point) => (
                         <img
                             key={point.id}
                             src={point.image}
                             alt={point.label}
-                            style={{
-                                width: "100px",
-                                height: "100px",
-                                objectFit: "cover",
-                                cursor: "pointer",
-                            }}
                             onClick={() => setActiveImage(point.image)}
                         />
                     ))}
                 </div>
-                {/* Permanentes Bild unter der Galerie */}
-                <div style={{ marginTop: "20px", textAlign: "center" }}>
-                    <img
-                        src={Front}
-                        alt="Front"
-                        style={{
-                            width: "100%",
-                            maxWidth: "35vw",
-                            height: "auto",
-                            borderRadius: "10px",
-                        }}
-                    />
+
+                {/* Permanentes Bild */}
+                <div className="permanentes-bild">
+                    <img src={Front} alt="Front" />
                 </div>
-                {activeImage && (
-                    <div
-                        style={{
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            width: "100vw",
-                            height: "100vh",
-                            backgroundColor: "rgba(0,0,0,0.8)",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            zIndex: 1000,
-                        }}
-                        onClick={() => setActiveImage(null)}
-                    >
-                        <img
-                            src={activeImage}
-                            alt="Vergrößertes Bild"
-                            style={{ maxHeight: "80%", maxWidth: "80%", borderRadius: "10px" }}
-                        />
-
-                    </div>
-                )}
             </div>
-        </div>
 
+            {activeImage && (
+                <div className="overlay" onClick={() => setActiveImage(null)}>
+                    <img src={activeImage} alt="Vergrößertes Bild" />
+                </div>
+            )}
+        </div>
     );
 }
 
