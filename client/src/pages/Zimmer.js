@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Bad from "../assets/Bad.jpg";
 import Kueche from "../assets/Kueche.jpg";
 import Zimmer1 from "../assets/zimmer2.jpeg";
@@ -10,6 +10,7 @@ import Front from "../assets/home_new.jpeg";
 import "./Zimmer.css";
 
 function Zimmer() {
+
     const [activeImage, setActiveImage] = useState(null);
 
     const points = [
@@ -65,7 +66,7 @@ function Zimmer() {
                             key={point.id}
                             cx={point.x}
                             cy={point.y}
-                            r="10"
+                            r="20"
                             fill="red"
                             onClick={() => handlePointClick(point)}
                             style={{ cursor: "pointer" }}
@@ -74,23 +75,27 @@ function Zimmer() {
                 </svg>
             </div>
 
-            {/* Rechte Seite: Galerie */}
-            <div className="galerie-container">
-                <h2>Galerie</h2>
-                <div className="galerie-grid">
-                    {points.map((point) => (
-                        <img
-                            key={point.id}
-                            src={point.image}
-                            alt={point.label}
-                            onClick={() => setActiveImage(point.image)}
-                        />
-                    ))}
-                </div>
 
+            {/* Rechte Seite */}
+            <div className="rechte-seite">
                 {/* Permanentes Bild */}
                 <div className="permanentes-bild">
                     <img src={Front} alt="Front" />
+                </div>
+
+                {/* Galerie */}
+                <div className="galerie-container">
+                    <h2>Galerie</h2>
+                    <div className="galerie-grid">
+                        {points.map((point) => (
+                            <img
+                                key={point.id}
+                                src={point.image}
+                                alt={point.label}
+                                onClick={() => setActiveImage(point.image)}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
 

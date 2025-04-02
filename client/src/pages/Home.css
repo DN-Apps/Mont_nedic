@@ -189,5 +189,7 @@ html {
 
   .bottom-left {
     margin-left: 0;
+    width: 100%;
+    min-height: 50vh;
   }
 }

@@ -55,10 +55,21 @@ function App() {
                     <NavLink to="/kontakt" className="menu-item" onClick={() => setMenuOpen(false)}>
                         <FaEnvelope /> <span>Kontakt</span>
                     </NavLink>
+                    <NavLink>
+                        {isLoggedIn ? (
+                            <button onClick={handleLogout} className="menu-item">
+                                <FaSignOutAlt /> <span>Abmelden</span>
+                            </button>
+                        ) : (
+                            <NavLink to="/login" className="auth-section" onClick={() => setMenuOpen(false)}>
+                                <FaUser /> <span>Anmelden</span>
+                            </NavLink>
+                        )}
+                    </NavLink>
                 </nav>
 
                 {/* Anmeldebereich */}
-                <div className="auth-section">
+                {/*<div className="auth-section">
                     {isLoggedIn ? (
                         <button onClick={handleLogout} className="auth-button">
                             <FaSignOutAlt /> <span>Abmelden</span>
@@ -68,7 +79,7 @@ function App() {
                             <FaUser /> <span>Anmelden</span>
                         </NavLink>
                     )}
-                </div>
+                </div>*/}
             </header>
 
             <Routes>

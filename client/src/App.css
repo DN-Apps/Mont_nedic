@@ -48,6 +48,9 @@ body {
   margin-left: auto;
   display: flex;
   align-items: center;
+  color: white;
+  font-size: 14px;
+  padding: 10px 15px;
 }
 
 /* ============================= */
@@ -85,7 +88,7 @@ body {
 
   /* Wenn das Menü geöffnet ist */
   .menu.open {
-    min-height: 300px; /* Dynamischer Platz für das Menü */
+    min-height: 55vh; /* Dynamischer Platz für das Menü */
     padding: 10px 0;
     min-width: 100%;
   }
@@ -125,4 +128,10 @@ body {
     font-size: 14px;
     padding: 10px 15px;
   }
+}
+
+.login-container {
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
 }
