@@ -1,12 +1,14 @@
-import React from 'react'
+import React from 'react';
 
 function Admin() {
+
+
     return (
         <div>
-            Admin-Seite
+            <h2>Admin Bereich</h2>
 
         </div>
-    )
+    );
 }
 
-export default Admin
+export default Admin;

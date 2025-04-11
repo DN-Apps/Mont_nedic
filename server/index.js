@@ -1,37 +1,57 @@
 const express = require('express');
-const cors = require('cors');
-const mysql = require('mysql2');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const bcrypt = require('bcrypt');
+const db = require('./db');
+const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+app.use(bodyParser.json()); // body-parser middleware für POST-Daten
 
-app.use(cors());
-app.use(express.json());
+// Registrierungs-Route
+app.post('/register', async (req, res) => {
+    const { username, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-// MySQL Verbindung
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-});
+    try {
+        const [userExists] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+        if (userExists.length > 0) {
+            return res.status(400).json({ message: "Benutzer existiert bereits" });
+        }
 
-db.connect((err) => {
-    if (err) {
-        console.error('Datenbankverbindung fehlgeschlagen:', err.message);
-    } else {
-        console.log('Mit der MySQL-Datenbank verbunden.');
+        // Neuen Benutzer hinzufügen
+        await db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword]);
+        res.json({ success: true, message: "Benutzer registriert!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Fehler bei der Registrierung" });
     }
 });
 
-// Beispielroute
-app.get('/', (req, res) => {
-    res.send('Monteurzimmer Nedic API läuft!');
+// Login-Route
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+        if (rows.length === 0) {
+            return res.status(400).json({ message: "Benutzer nicht gefunden" });
+        }
+
+        const user = rows[0];
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            return res.status(401).json({ message: "Falsches Passwort" });
+        }
+
+        // Login erfolgreich (keine JWT oder MFA nötig)
+        res.json({ success: true, message: "Login erfolgreich!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Login-Fehler" });
+    }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server läuft auf http://localhost:${PORT}`);
+// Server starten
+app.listen(5000, () => {
+    console.log("✅ Server läuft auf http://localhost:5000");
 });

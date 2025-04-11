@@ -1,8 +1,11 @@
 html,
 body {
-  overflow: visible;
+  overflow-x: none;
 }
 .pageBuchung {
-  border: 3px red solid;
   max-height: 30px;
+}
+
+.element::-webkit-scrollbar {
+  display: none; /* Für Chrome, Safari und Edge */
 }

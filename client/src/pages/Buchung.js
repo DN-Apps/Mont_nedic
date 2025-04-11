@@ -5,7 +5,6 @@ import "./Buchung.css"
 function Buchung() {
     return (
         <div className="buchung">
-            <h5 className="pageBuchung">Buchung</h5>
             <BookingForm />
         </div>
     );

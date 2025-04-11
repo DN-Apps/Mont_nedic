@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, NavLink, useNavigate } from "react-router-dom";
-import { FaHome, FaBed, FaCalendarCheck, FaEnvelope, FaUser, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
+import { FaHome, FaBed, FaCalendarCheck, FaEnvelope, FaUser, FaBars, FaTimes, FaHandshake } from "react-icons/fa";
 import Startseite from "./pages/Startseite";
 import Zimmer from "./pages/Zimmer";
 import Buchung from "./pages/Buchung";
 import Kontakt from "./pages/Kontakt";
 import Admin from "./pages/Admin";
 import "./App.css"; // Für Styling
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function AppWrapper() {
     return (
@@ -27,11 +29,19 @@ function App() {
         setMenuOpen(false); // Menü schließen nach Login
     };
 
-    const handleLogout = () => {
-        setIsLoggedIn(false);
-        navigate("/");
-        setMenuOpen(false); // Menü schließen nach Logout
-    };
+    useEffect(() => {
+        const token = localStorage.getItem("sessionToken");
+        const expires = localStorage.getItem("sessionExpires");
+
+        if (token && expires && new Date().getTime() < parseInt(expires)) {
+            setIsLoggedIn(true);
+        } else {
+            localStorage.removeItem("sessionToken");
+            localStorage.removeItem("sessionExpires");
+            setIsLoggedIn(false);
+        }
+    }, []);
+
 
     return (
         <div className="App">
@@ -55,31 +65,14 @@ function App() {
                     <NavLink to="/kontakt" className="menu-item" onClick={() => setMenuOpen(false)}>
                         <FaEnvelope /> <span>Kontakt</span>
                     </NavLink>
-                    <NavLink>
-                        {isLoggedIn ? (
-                            <button onClick={handleLogout} className="menu-item">
-                                <FaSignOutAlt /> <span>Abmelden</span>
-                            </button>
-                        ) : (
-                            <NavLink to="/login" className="auth-section" onClick={() => setMenuOpen(false)}>
-                                <FaUser /> <span>Anmelden</span>
-                            </NavLink>
-                        )}
+                    {/* <NavLink to="/admin" className="menu-item" onClick={() => setMenuOpen(false)}>
+                        <FaUser /> <span>Login</span>
                     </NavLink>
+                    <NavLink to="/register" className="menu-item" onClick={() => setMenuOpen(false)}>
+                        <FaHandshake />
+                        <div>Register</div>
+                    </NavLink> */}
                 </nav>
-
-                {/* Anmeldebereich */}
-                {/*<div className="auth-section">
-                    {isLoggedIn ? (
-                        <button onClick={handleLogout} className="auth-button">
-                            <FaSignOutAlt /> <span>Abmelden</span>
-                        </button>
-                    ) : (
-                        <NavLink to="/login" className="auth-button" onClick={() => setMenuOpen(false)}>
-                            <FaUser /> <span>Anmelden</span>
-                        </NavLink>
-                    )}
-                </div>*/}
             </header>
 
             <Routes>
@@ -87,45 +80,13 @@ function App() {
                 <Route path="/zimmer" element={<Zimmer />} />
                 <Route path="/buchung" element={<Buchung />} />
                 <Route path="/kontakt" element={<Kontakt />} />
-                <Route path="/admin" element={isLoggedIn ? <Admin /> : <Login onLogin={handleLogin} />} />
-                <Route path="/login" element={<Login onLogin={handleLogin} />} />
+                {/* <Route path="/admin" element={isLoggedIn ? <Admin /> : <Login onLogin={handleLogin} />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} /> */}
             </Routes>
         </div>
     );
 }
 
-function Login({ onLogin }) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (username === "admin" && password === "password") {
-            onLogin();
-        } else {
-            alert("Ungültige Anmeldedaten");
-        }
-    };
-
-    return (
-        <div className="login-container">
-            <h2>Anmelden</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Benutzername:</label>
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                </div>
-                <div className="form-group">
-                    <label>Passwort:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </div>
-                <button type="submit" className="login-button">
-                    Anmelden
-                </button>
-            </form>
-            <button className="register-button">Registrieren</button>
-        </div>
-    );
-}
 
 export default AppWrapper;

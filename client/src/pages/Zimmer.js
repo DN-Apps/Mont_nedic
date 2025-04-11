@@ -11,7 +11,8 @@ import "./Zimmer.css";
 
 function Zimmer() {
 
-    const [activeImage, setActiveImage] = useState(null);
+    // Wir speichern den Index des aktiven Bildes (statt nur das Bild selbst)
+    const [activeIndex, setActiveIndex] = useState(null);
 
     const points = [
         { id: 1, x: 180, y: 450, label: "Treppe", image: Treppe },
@@ -23,9 +24,28 @@ function Zimmer() {
         { id: 7, x: 650, y: 100, label: "Zimmer", image: Zimmer1 },
     ];
 
-    const handlePointClick = (point) => {
-        setActiveImage(point.image);
+    // Wenn ein Punkt angeklickt wird, merken wir uns den Index
+    const handlePointClick = (index) => {
+        setActiveIndex(index);
     };
+
+    // Pfeiltasten-Navigation & ESC zum Schließen
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (activeIndex === null) return;
+
+            if (e.key === "ArrowRight") {
+                setActiveIndex((prev) => (prev + 1) % points.length); // nächstes Bild
+            } else if (e.key === "ArrowLeft") {
+                setActiveIndex((prev) => (prev - 1 + points.length) % points.length); // vorheriges Bild
+            } else if (e.key === "Escape") {
+                setActiveIndex(null); // schließen
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [activeIndex, points.length]);
 
     return (
         <div className="zimmer-container">
@@ -61,20 +81,19 @@ function Zimmer() {
                     <text x="550" y="270" fontSize="12" fill="#d84315">Wohnzimmer</text>
 
                     {/* Interaktive Punkte */}
-                    {points.map((point) => (
+                    {points.map((point, index) => (
                         <circle
                             key={point.id}
                             cx={point.x}
                             cy={point.y}
                             r="20"
                             fill="red"
-                            onClick={() => handlePointClick(point)}
+                            onClick={() => handlePointClick(index)} // Änderung hier
                             style={{ cursor: "pointer" }}
                         />
                     ))}
                 </svg>
             </div>
-
 
             {/* Rechte Seite */}
             <div className="rechte-seite">
@@ -87,23 +106,61 @@ function Zimmer() {
                 <div className="galerie-container">
                     <h2>Galerie</h2>
                     <div className="galerie-grid">
-                        {points.map((point) => (
+                        {points.map((point, index) => (
                             <img
                                 key={point.id}
                                 src={point.image}
                                 alt={point.label}
-                                onClick={() => setActiveImage(point.image)}
+                                onClick={() => handlePointClick(index)} // Änderung hier
                             />
                         ))}
                     </div>
                 </div>
             </div>
 
-            {activeImage && (
-                <div className="overlay" onClick={() => setActiveImage(null)}>
-                    <img src={activeImage} alt="Vergrößertes Bild" />
+            {/* Overlay mit großem Bild */}
+            {activeIndex !== null && (
+                <div className="overlay">
+                    {/* ❌ Button zum Schließen */}
+                    <button
+                        className="close-button"
+                        onClick={() => setActiveIndex(null)}
+                    >
+                        &#10005;
+                    </button>
+
+                    {/* ⬅️ Pfeil links */}
+                    <button
+                        className="arrow-button left"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveIndex((prev) => (prev - 1 + points.length) % points.length);
+                        }}
+                    >
+                        &#8592;
+                    </button>
+
+                    {/* 🖼️ Bild */}
+                    <img
+                        src={points[activeIndex].image}
+                        alt="Vergrößertes Bild"
+                    />
+
+                    {/* ➡️ Pfeil rechts */}
+                    <button
+                        className="arrow-button right"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveIndex((prev) => (prev + 1) % points.length);
+                        }}
+                    >
+                        &#8594;
+                    </button>
                 </div>
             )}
+
+
+
         </div>
     );
 }
