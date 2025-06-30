@@ -9,7 +9,12 @@ const cors = require('cors');
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*', // Alternativ: 'https://rent.ned-it.de'
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
+}));
+
 app.use(bodyParser.json()); // Middleware für JSON-Daten
 
 // 📩 Kontaktformular-Route
