@@ -5,7 +5,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 function DatePicker({ selectedDates, setSelectedDates, initiallyOpen = false, readOnly = false }) {
-    const [isOpen, setIsOpen] = useState(initiallyOpen); // Kalender ist initial geöffnet
+    const [isOpen, setIsOpen] = useState(initiallyOpen);
 
     const [dateRange, setDateRange] = useState([
         {
@@ -36,6 +36,10 @@ function DatePicker({ selectedDates, setSelectedDates, initiallyOpen = false, re
         }
     };
 
+    // Heute als Mindestdatum
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Auf Mitternacht setzen für korrekte Vergleiche
+
     return (
         <div>
             <div
@@ -53,7 +57,6 @@ function DatePicker({ selectedDates, setSelectedDates, initiallyOpen = false, re
                     <span>
                         {`(${selectedDates.startDate.toLocaleDateString("de-DE")} - ${selectedDates.endDate.toLocaleDateString("de-DE")})`}
                     </span>
-
                 )}
             </div>
             {isOpen && !readOnly && (
@@ -63,6 +66,7 @@ function DatePicker({ selectedDates, setSelectedDates, initiallyOpen = false, re
                     moveRangeOnFirstSelection={false}
                     ranges={dateRange}
                     locale={de}
+                    minDate={today}
                 />
             )}
         </div>

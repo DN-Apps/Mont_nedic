@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Kontakt.css";
 
 function Kontakt() {
@@ -11,14 +11,22 @@ function Kontakt() {
         city: "",
         country: "",
         phone: "",
+        email: "",
         message: "",
-        captcha: "",
     });
 
+    const [captchaCode, setCaptchaCode] = useState("");
     const [captchaInput, setCaptchaInput] = useState("");
     const [captchaCorrect, setCaptchaCorrect] = useState(false);
 
-    const captchaCode = "1234"; // Beispiel-Captcha-Code
+    // Zufälliger 4-stelliger Zahlencode
+    const generateCaptcha = () => {
+        return Math.floor(1000 + Math.random() * 9000).toString();
+    };
+
+    useEffect(() => {
+        setCaptchaCode(generateCaptcha());
+    }, []);
 
     const handleContactFormChange = (field, value) => {
         setContactForm({ ...contactForm, [field]: value });
@@ -29,28 +37,49 @@ function Kontakt() {
         setCaptchaCorrect(value === captchaCode);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!captchaCorrect) {
-            alert("Bitte lösen Sie das Captcha korrekt.");
+            alert("❌ Bitte lösen Sie das CAPTCHA korrekt.");
+            setCaptchaCode(generateCaptcha()); // neues CAPTCHA
+            setCaptchaInput("");
             return;
         }
-        console.log("Formular abgeschickt:", contactForm);
-        alert("Vielen Dank! Ihr Formular wurde abgeschickt.");
-        setContactForm({
-            salutation: "",
-            firstName: "",
-            lastName: "",
-            street: "",
-            postalCode: "",
-            city: "",
-            country: "",
-            phone: "",
-            message: "",
-            captcha: "",
-        });
-        setCaptchaInput("");
-        setCaptchaCorrect(false);
+
+        try {
+            const response = await fetch("http://localhost:5001/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(contactForm),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert("✅ Vielen Dank! Ihre Nachricht wurde gesendet.");
+                setContactForm({
+                    salutation: "",
+                    firstName: "",
+                    lastName: "",
+                    street: "",
+                    postalCode: "",
+                    city: "",
+                    country: "",
+                    phone: "",
+                    email: "",
+                    message: "",
+                });
+                setCaptchaCode(generateCaptcha());
+                setCaptchaInput("");
+                setCaptchaCorrect(false);
+            } else {
+                alert("❌ Fehler beim Senden: " + result.message);
+            }
+        } catch (err) {
+            console.error("Fehler beim Senden:", err);
+            alert("❌ Es gab ein Problem beim Versenden der Nachricht.");
+        }
     };
 
     return (
@@ -133,6 +162,15 @@ function Kontakt() {
                     />
                 </label>
                 <label>
+                    E-Mail:
+                    <input
+                        type="email"
+                        value={contactForm.email}
+                        onChange={(e) => handleContactFormChange("email", e.target.value)}
+                        required
+                    />
+                </label>
+                <label>
                     Nachricht:
                     <textarea
                         maxLength="500"
@@ -142,11 +180,12 @@ function Kontakt() {
                     <small>{500 - contactForm.message.length} Zeichen verbleibend</small>
                 </label>
                 <label>
-                    Captcha (Code: 1234):
+                    Captcha (Code: <strong>{captchaCode}</strong>):
                     <input
                         type="text"
                         value={captchaInput}
                         onChange={(e) => handleCaptchaChange(e.target.value)}
+                        placeholder="Geben Sie den Code ein"
                     />
                 </label>
                 <button type="submit" disabled={!captchaCorrect}>
@@ -157,16 +196,19 @@ function Kontakt() {
             <div className="faq-section">
                 <h3>Häufig gestellte Fragen</h3>
                 <details>
-                    <summary>Wie erreiche ich den Kundenservice?</summary>
-                    <p>Sie können uns telefonisch oder per E-Mail kontaktieren. Unsere Kontaktdaten finden Sie oben im Formular.</p>
+                    <summary>Wie viele Zimmer gibt es?</summary>
+                    <p>Wir bieten 3 Zimmer an:<br />2 Einbettzimmer, 1 Doppelbettzimmer.</p>
                 </details>
                 <details>
-                    <summary>Welche Öffnungszeiten hat unser Büro?</summary>
-                    <p>Unser Büro ist von Montag bis Freitag von 9:00 bis 17:00 Uhr geöffnet.</p>
+                    <summary>Sind Internet und Parkmöglichkeiten im Preis inbegriffen?</summary>
+                    <p>Ja, es handelt sich um den Gesamtpreis für die Zimmer. Es entstehen keine weiteren Kosten für W-LAN oder Parkmöglichkeiten.</p>
                 </details>
                 <details>
-                    <summary>Wie kann ich meine Buchung ändern?</summary>
-                    <p>Bitte kontaktieren Sie uns per E-Mail mit Ihrer Buchungsnummer, und wir helfen Ihnen weiter.</p>
+                    <summary>Wie kann ich Sie bei Fragen kontaktieren?</summary>
+                    <p>Bitte kontaktieren Sie uns unter:</p>
+                    <p>Mobil: +43 1701071715</p>
+                    <p>Mail: daniel-nedic@hotmail.de</p>
+                    <p>Daniel Nedic</p>
                 </details>
             </div>
         </div>
