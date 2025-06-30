@@ -108,7 +108,7 @@ function BookingForm() {
         try {
             // In der submitBooking-Funktion (Zeile 109)
             //lokal muss da 'http://localhost:5001/api/booking' hin
-            const response = await fetch('https://rent.ned-it.de/api/booking', { // Geändert von 3001 auf 5001
+            const response = await fetch('http://localhost:5001/api/booking', { // Geändert von 3001 auf 5001
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
