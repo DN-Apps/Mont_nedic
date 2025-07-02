@@ -9,6 +9,8 @@ function BookingForm() {
     const [isPeriodVisible, setIsPeriodVisible] = useState(false);
     const [isRoomsVisible, setIsRoomsVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const API_URL = process.env.REACT_APP_API_URL;
+
 
     const [contactForm, setContactForm] = useState({
         salutation: "",
@@ -108,7 +110,7 @@ function BookingForm() {
         try {
             // In der submitBooking-Funktion (Zeile 109)
             //lokal muss da 'http://localhost:5001/api/booking' hin
-            const response = await fetch('/api/booking', { // Geändert von 3001 auf 5001
+            const response = await fetch(`${API_URL}/api/booking`, { // Geändert von 3001 auf 5001
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

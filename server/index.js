@@ -6,16 +6,14 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 
-
-
 const app = express();
 app.use(cors({
-    origin: '*', // Alternativ: 'https://rent.ned-it.de'
+    origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type']
 }));
 
-app.use(bodyParser.json()); // Middleware für JSON-Daten
+app.use(bodyParser.json());
 
 // 📩 Kontaktformular-Route
 app.post('/api/contact', async (req, res) => {
@@ -32,14 +30,16 @@ app.post('/api/contact', async (req, res) => {
         message
     } = req.body;
 
-    const transporter = nodemailer.createTransport({ // Geändert von createTransporter
+    const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT),
         secure: false,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
-        }
+        },
+        logger: true,
+        debug: true
     });
 
     const mailOptions = {
@@ -58,14 +58,14 @@ Nachricht:
 ${message}
         `,
         replyTo: email,
-        cc: email // Kopie an Absender
+        cc: email
     };
 
     try {
         await transporter.sendMail(mailOptions);
         res.status(200).json({ success: true, message: "E-Mail wurde versendet." });
     } catch (err) {
-        console.error("Fehler beim Mailversand:", err);
+        console.error("Fehler beim Mailversand (Kontaktformular):", err);
         res.status(500).json({ success: false, message: "E-Mail-Versand fehlgeschlagen." });
     }
 });
@@ -78,7 +78,6 @@ app.post('/api/booking', async (req, res) => {
         contactForm
     } = req.body;
 
-    // Berechne die Anzahl der Nächte
     const calculateDateDifference = (startDate, endDate) => {
         const start = new Date(startDate);
         const end = new Date(endDate);
@@ -86,7 +85,6 @@ app.post('/api/booking', async (req, res) => {
         return differenceInTime / (1000 * 3600 * 24);
     };
 
-    // Berechne Zimmerkosten (gleiche Logik wie im Frontend)
     const calculateRoomTotal = (room, nights) => {
         let remainingNights = nights;
         let roomTotal = 0;
@@ -97,36 +95,34 @@ app.post('/api/booking', async (req, res) => {
             remainingNights -= 7;
         }
 
-        return Math.min(roomTotal, 400); // Maximal 400€ pro Zimmer
+        return Math.min(roomTotal, 400);
     };
 
     const nights = calculateDateDifference(bookingDates.startDate, bookingDates.endDate);
     const totalCost = selectedRooms.reduce((total, room) => total + calculateRoomTotal(room, nights), 0);
 
-    // Erstelle Transporter mit den Buchungsformular-Credentials
-    const transporter = nodemailer.createTransport({ // Geändert von createTransporter
+    const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT),
         secure: false,
         auth: {
             user: process.env.BOOKING_EMAIL_USER,
             pass: process.env.BOOKING_EMAIL_PASS
-        }
+        },
+        logger: true,
+        debug: true
     });
 
-    // E-Mail-Inhalt für den Eigentümer
     const ownerMailOptions = {
         from: `"Buchungsformular" <${process.env.BOOKING_EMAIL_USER}>`,
-        to: process.env.BOOKING_EMAIL_USER, // Hier deine eigene E-Mail-Adresse eintragen
+        to: process.env.BOOKING_EMAIL_USER,
         subject: "Neue Buchungsanfrage - Monteurzimmer",
         html: `
             <h2>Neue Buchungsanfrage</h2>
-            
             <h3>Buchungszeitraum</h3>
             <p><strong>Von:</strong> ${new Date(bookingDates.startDate).toLocaleDateString('de-DE')}</p>
             <p><strong>Bis:</strong> ${new Date(bookingDates.endDate).toLocaleDateString('de-DE')}</p>
             <p><strong>Anzahl Nächte:</strong> ${nights}</p>
-            
             <h3>Gewählte Zimmer</h3>
             ${selectedRooms.map(room => `
                 <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0;">
@@ -135,9 +131,7 @@ app.post('/api/booking', async (req, res) => {
                     <p><strong>Gesamtkosten für ${nights} Nächte:</strong> ${calculateRoomTotal(room, nights)}€</p>
                 </div>
             `).join('')}
-            
             <h3>Gesamtkosten: ${totalCost}€</h3>
-            
             <h3>Kontaktdaten</h3>
             <p><strong>Anrede:</strong> ${contactForm.salutation}</p>
             <p><strong>Name:</strong> ${contactForm.firstName} ${contactForm.lastName}</p>
@@ -148,23 +142,19 @@ app.post('/api/booking', async (req, res) => {
         `
     };
 
-    // E-Mail-Inhalt für den Kunden (Bestätigung)
     const customerMailOptions = {
         from: `"Monteurzimmer Buchung" <${process.env.BOOKING_EMAIL_USER}>`,
-        to: contactForm.email, // Email-Feld muss im Frontend hinzugefügt werden
+        to: contactForm.email,
         subject: "Buchungsanfrage - Monteurzimmer",
         html: `
             <h2>Vielen Dank für Ihre Buchungsanfrage!</h2>
             <p>Liebe/r ${contactForm.salutation} ${contactForm.lastName},</p>
             <p>wir haben Ihre Buchungsanfrage erhalten und werden uns in Kürze bei Ihnen melden.</p>
-            
             <h3>Ihre Buchungsdetails:</h3>
-            
             <h4>Buchungszeitraum</h4>
             <p><strong>Von:</strong> ${new Date(bookingDates.startDate).toLocaleDateString('de-DE')}</p>
             <p><strong>Bis:</strong> ${new Date(bookingDates.endDate).toLocaleDateString('de-DE')}</p>
             <p><strong>Anzahl Nächte:</strong> ${nights}</p>
-            
             <h4>Gewählte Zimmer</h4>
             ${selectedRooms.map(room => `
                 <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0;">
@@ -173,33 +163,27 @@ app.post('/api/booking', async (req, res) => {
                     <p><strong>Gesamtkosten für ${nights} Nächte:</strong> ${calculateRoomTotal(room, nights)}€</p>
                 </div>
             `).join('')}
-            
             <h4>Gesamtkosten: ${totalCost}€</h4>
-            
             <p>Bei Fragen können Sie uns gerne unter der Telefonnummer +49 1701071715 erreichen.</p>
             <p>Mit freundlichen Grüßen<br>Ihr Monteurzimmer-Team</p>
         `
     };
 
     try {
-        // Sende beide E-Mails
         await transporter.sendMail(ownerMailOptions);
         await transporter.sendMail(customerMailOptions);
-
         res.status(200).json({
             success: true,
             message: "Buchungsanfrage wurde erfolgreich versendet!"
         });
     } catch (err) {
-        console.error("Fehler beim Mailversand:", err);
+        console.error("Fehler beim Mailversand (Buchungsformular):", err);
         res.status(500).json({
             success: false,
             message: "Fehler beim Versenden der Buchungsanfrage."
         });
     }
 });
-
-
 
 // 🧑‍💻 Registrierungs-Route
 app.post('/register', async (req, res) => {
@@ -215,7 +199,7 @@ app.post('/register', async (req, res) => {
         await db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword]);
         res.json({ success: true, message: "Benutzer registriert!" });
     } catch (err) {
-        console.error(err);
+        console.error("Fehler bei der Registrierung:", err);
         res.status(500).json({ message: "Fehler bei der Registrierung" });
     }
 });
@@ -238,7 +222,7 @@ app.post('/login', async (req, res) => {
 
         res.json({ success: true, message: "Login erfolgreich!" });
     } catch (err) {
-        console.error(err);
+        console.error("Fehler beim Login:", err);
         res.status(500).json({ message: "Login-Fehler" });
     }
 });
