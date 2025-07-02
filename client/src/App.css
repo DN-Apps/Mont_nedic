@@ -8,6 +8,7 @@ body {
   display: flex;
   flex-direction: column;
   margin-top: 7vh;
+  padding-bottom: 60px;
 }
 
 .header {
@@ -51,6 +52,37 @@ body {
   color: white;
   font-size: 14px;
   padding: 10px 15px;
+}
+
+/* Footer-Styling */
+.footer {
+  text-align: center;
+  padding: 15px 0;
+  background-color: #222;
+  color: white;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 1000;
+}
+
+/* Impressum-Link im Footer */
+.impressum-link {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 1rem;
+  font-family: inherit;
+  padding: 0;
+}
+
+.impressum-link:hover,
+.impressum-link:focus {
+  color: white;
+  outline: none;
+  text-decoration: none;
 }
 
 /* ============================= */
