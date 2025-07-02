@@ -229,6 +229,6 @@ app.post('/login', async (req, res) => {
 
 // 🖥️ Server starten
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Server läuft auf http://localhost:${PORT}`);
 });
