@@ -112,7 +112,7 @@ function Startseite() {
                     Kirchgasse 8<br />
                     74831 Gundelsheim<br />
                     <a href="mailto:Daniel-nedic@hotmail.de">Daniel-nedic@hotmail.de</a><br />
-                    <a href="tel:01701071715">0170 1071715</a>
+                    <a href="tel:01701071715">+49170 1071715</a>
                 </p>
             </div>
         </div>

@@ -18,6 +18,8 @@ function Kontakt() {
     const [captchaCode, setCaptchaCode] = useState("");
     const [captchaInput, setCaptchaInput] = useState("");
     const [captchaCorrect, setCaptchaCorrect] = useState(false);
+    const [isLoadingCity, setIsLoadingCity] = useState(false);
+    const [cityFound, setCityFound] = useState(false);
 
     // Zufälliger 4-stelliger Zahlencode
     const generateCaptcha = () => {
@@ -29,7 +31,56 @@ function Kontakt() {
     }, []);
 
     const handleContactFormChange = (field, value) => {
-        setContactForm({ ...contactForm, [field]: value });
+        setContactForm(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleCountryChange = (value) => {
+        handleContactFormChange("country", value);
+
+        // Stadt & PLZ zurücksetzen, wenn NICHT Deutschland
+        if (value !== "Deutschland") {
+            handleContactFormChange("postalCode", "");
+            handleContactFormChange("city", "");
+            setCityFound(false);
+        }
+    };
+
+    const searchCityByPostalCode = async (postalCode) => {
+        try {
+            setIsLoadingCity(true);
+            const resp = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&countrycodes=de&postalcode=${postalCode}&limit=5`,
+                { headers: { 'User-Agent': 'Monteurzimmer Gundelsheim' } }
+            );
+            const data = await resp.json();
+            if (data?.length > 0) {
+                const parts = data[0].display_name.split(",").map(p => p.trim());
+                return parts.length >= 3 ? parts[2] : "";
+            }
+            return "";
+        } catch (e) {
+            console.error("Fehler bei der Stadtsuche:", e);
+            return "";
+        } finally {
+            setIsLoadingCity(false);
+        }
+    };
+
+    const handlePostalCodeChange = async (value) => {
+        handleContactFormChange("postalCode", value);
+        handleContactFormChange("city", "");
+        setCityFound(false);
+
+        const cleaned = value.replace(/\s/g, "");
+        const isGermanPLZ = /^\d{5}$/.test(cleaned);
+
+        if (contactForm.country === "Deutschland" && isGermanPLZ) {
+            const city = await searchCityByPostalCode(cleaned);
+            if (city) {
+                handleContactFormChange("city", city);
+                setCityFound(true);
+            }
+        }
     };
 
     const handleCaptchaChange = (value) => {
@@ -85,112 +136,112 @@ function Kontakt() {
     return (
         <div className="kontakt-container">
             <h2>Kontakt</h2>
-            <form onSubmit={handleSubmit} className="contact-form">
-                <label>
-                    Anrede:
-                    <select
-                        value={contactForm.salutation}
-                        onChange={(e) => handleContactFormChange("salutation", e.target.value)}
-                    >
-                        <option value="">Bitte auswählen</option>
-                        <option value="Herr">Herr</option>
-                        <option value="Frau">Frau</option>
-                        <option value="Sonstige">Sonstige</option>
-                    </select>
-                </label>
-                <label>
-                    Vorname:
-                    <input
-                        type="text"
-                        value={contactForm.firstName}
-                        onChange={(e) => handleContactFormChange("firstName", e.target.value)}
-                    />
-                </label>
-                <label>
-                    Nachname:
-                    <input
-                        type="text"
-                        value={contactForm.lastName}
-                        onChange={(e) => handleContactFormChange("lastName", e.target.value)}
-                    />
-                </label>
-                <label>
-                    Straße:
-                    <input
-                        type="text"
-                        value={contactForm.street}
-                        onChange={(e) => handleContactFormChange("street", e.target.value)}
-                    />
-                </label>
-                <label>
-                    Postleitzahl:
-                    <input
-                        type="text"
-                        value={contactForm.postalCode}
-                        onChange={(e) => handleContactFormChange("postalCode", e.target.value)}
-                    />
-                </label>
-                <label>
-                    Stadt:
-                    <input
-                        type="text"
-                        value={contactForm.city}
-                        onChange={(e) => handleContactFormChange("city", e.target.value)}
-                    />
-                </label>
-                <label>
-                    Land:
-                    <select
-                        value={contactForm.country}
-                        onChange={(e) => handleContactFormChange("country", e.target.value)}
-                    >
-                        <option value="">Bitte auswählen</option>
-                        <option value="Deutschland">Deutschland</option>
-                        <option value="Frankreich">Frankreich</option>
-                        <option value="Italien">Italien</option>
-                        <option value="Spanien">Spanien</option>
-                        <option value="Österreich">Österreich</option>
-                        <option value="Schweiz">Schweiz</option>
-                    </select>
-                </label>
-                <label>
-                    Tel./Mobil:
-                    <input
-                        type="tel"
-                        value={contactForm.phone}
-                        onChange={(e) => handleContactFormChange("phone", e.target.value)}
-                    />
-                </label>
-                <label>
-                    E-Mail:
-                    <input
-                        type="email"
-                        value={contactForm.email}
-                        onChange={(e) => handleContactFormChange("email", e.target.value)}
-                        required
-                    />
-                </label>
-                <label>
-                    Nachricht:
-                    <textarea
-                        maxLength="500"
-                        value={contactForm.message}
-                        onChange={(e) => handleContactFormChange("message", e.target.value)}
-                    />
-                    <small>{500 - contactForm.message.length} Zeichen verbleibend</small>
-                </label>
-                <label>
-                    Captcha (Code: <strong>{captchaCode}</strong>):
-                    <input
-                        type="text"
-                        value={captchaInput}
-                        onChange={(e) => handleCaptchaChange(e.target.value)}
-                        placeholder="Geben Sie den Code ein"
-                    />
-                </label>
-                <button type="submit" disabled={!captchaCorrect}>
-                    Abschicken
-                </button>
+            <form onSubmit={handleSubmit} className="kontakt-form">
+                <div className="kontakt-form-group">
+                    <label>
+                        Anrede:
+                        <select value={contactForm.salutation} onChange={e => handleContactFormChange("salutation", e.target.value)}>
+                            <option value="">Bitte wählen</option>
+                            <option value="Herr">Herr</option>
+                            <option value="Frau">Frau</option>
+                            <option value="Sonstige">Sonstige</option>
+                        </select>
+                    </label>
+
+                    <div className="kontakt-grid">
+                        <label>
+                            Vorname:
+                            <input type="text" value={contactForm.firstName} onChange={e => handleContactFormChange("firstName", e.target.value)} />
+                        </label>
+                        <label>
+                            Nachname:
+                            <input type="text" value={contactForm.lastName} onChange={e => handleContactFormChange("lastName", e.target.value)} />
+                        </label>
+
+                        <label>
+                            Land:
+                            <select value={contactForm.country} onChange={e => handleCountryChange(e.target.value)}>
+                                <option value="">Bitte wählen</option>
+                                <option>Deutschland</option>
+                                <option>Österreich</option>
+                                <option>Schweiz</option>
+                                <option>Frankreich</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Postleitzahl:
+                            <input
+                                type="text"
+                                value={contactForm.postalCode}
+                                onChange={e => handlePostalCodeChange(e.target.value)}
+                                maxLength="5"
+                                className={cityFound ? "input-success" : ""}
+                            />
+                            {isLoadingCity && <small className="kontakt-info">🔍 Stadt wird gesucht…</small>}
+                            {cityFound && !isLoadingCity && <small className="kontakt-success">✓ Stadt gefunden</small>}
+                        </label>
+
+                        <label>
+                            Stadt:
+                            <input
+                                type="text"
+                                value={contactForm.city}
+                                readOnly={contactForm.country === "Deutschland"}
+                                placeholder={contactForm.country === "Deutschland" ? "Automatisch ausgefüllt" : "Bitte manuell eingeben"}
+                                onChange={e => handleContactFormChange("city", e.target.value)}
+                                className={contactForm.country === "Deutschland" ? "readonly-input" : ""}
+                            />
+                        </label>
+                    </div>
+
+                    <label>
+                        Straße:
+                        <input type="text" value={contactForm.street} onChange={e => handleContactFormChange("street", e.target.value)} />
+                    </label>
+
+                    <div className="kontakt-grid">
+
+                    </div>
+
+                    <label>
+                        Telefon:
+                        <input type="tel" value={contactForm.phone} onChange={e => handleContactFormChange("phone", e.target.value)} />
+                    </label>
+
+                    <label>
+                        E-Mail:
+                        <input type="email" value={contactForm.email} onChange={e => handleContactFormChange("email", e.target.value)} required />
+                    </label>
+
+                    <label>
+                        Nachricht:
+                        <textarea maxLength="500" value={contactForm.message} onChange={e => handleContactFormChange("message", e.target.value)} />
+                        <small className="kontakt-info">{500 - contactForm.message.length} Zeichen verbleibend</small>
+                    </label>
+
+                    <label>
+                        Captcha-Code: <span className="kontakt-captcha-code">{captchaCode}
+                            <input
+                                type="text"
+                                placeholder="Captcha eingeben"
+                                value={captchaInput}
+                                onChange={e => handleCaptchaChange(e.target.value)}
+                                maxLength={4}
+                            />
+                            {captchaInput.length === 4 && !captchaCorrect && (
+                                <small className="kontakt-error">Captcha inkorrekt</small>
+                            )}
+                            {captchaInput.length === 4 && captchaCorrect && (
+                                <small className="kontakt-success">✓ Captcha korrekt</small>
+                            )}
+                        </span>
+                    </label>
+
+                    <button type="submit" className="kontakt-button" disabled={!captchaCorrect}>
+                        Absenden
+                    </button>
+                </div>
             </form>
 
             <div className="faq-section">

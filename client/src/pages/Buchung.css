@@ -1,6 +1,6 @@
 html,
 body {
-  overflow-x: none;
+  /* overflow-x: none; */
 }
 .pageBuchung {
   max-height: 30px;

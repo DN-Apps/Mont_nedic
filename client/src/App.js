@@ -44,12 +44,16 @@ function App() {
                 </nav>
             </header>
 
-            <Routes>
-                <Route path="/" element={<Startseite />} />
-                <Route path="/zimmer" element={<Zimmer />} />
-                <Route path="/buchung" element={<Buchung />} />
-                <Route path="/kontakt" element={<Kontakt />} />
-            </Routes>
+            <main className="main-content">
+                <Routes>
+                    <Route path="/" element={<Startseite />} />
+                    <Route path="/zimmer" element={<Zimmer />} />
+                    <Route path="/buchung" element={<Buchung />} />
+                    <Route path="/kontakt" element={<Kontakt />} />
+                </Routes>
+            </main>
+
+
 
             <PrivacyNotice />
 

@@ -206,7 +206,7 @@ body {
 /* Animation für aufklappbare Bereiche */
 .expandable {
   transition: max-height 0.3s ease-out;
-  overflow: hidden;
+  /* overflow: hidden; */
   max-height: 0;
 }
 

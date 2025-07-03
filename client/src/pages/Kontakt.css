@@ -1,63 +1,55 @@
-html,
-body {
-  overflow: visible;
-}
-
 .kontakt-container {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 20px 20px 150px;
+  font-family: "Segoe UI", sans-serif;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 }
 
-.contact-form {
+.kontakt-container h2 {
+  color: #333;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.kontakt-form-group {
   display: flex;
   flex-direction: column;
+  gap: 16px;
 }
 
-.contact-form label {
-  margin-bottom: 15px;
-  font-size: 14px;
+.kontakt-form-group label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
-.contact-form input,
-.contact-form select,
-.contact-form textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
+.kontakt-form-group input,
+.kontakt-form-group select,
+.kontakt-form-group textarea {
+  padding: 10px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+  box-sizing: border-box;
 }
 
-.contact-form textarea {
-  resize: vertical;
-  height: 100px;
+.kontakt-form-group input:focus,
+.kontakt-form-group select:focus,
+.kontakt-form-group textarea:focus {
+  border-color: #0077cc;
+  outline: none;
 }
 
-.contact-form button {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.contact-form button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.contact-form small {
-  font-size: 12px;
-  color: #666;
+.kontakt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 .faq-section {
@@ -68,16 +60,55 @@ body {
   margin-bottom: 15px;
 }
 
-details {
-  margin-bottom: 10px;
+@media screen and (max-width: 600px) {
+  .kontakt-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kontakt-container {
+    padding-bottom: 200px;
+  }
 }
 
-details summary {
+.kontakt-button {
+  padding: 12px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-details p {
-  margin: 5px 0 0 20px;
-  font-size: 14px;
+.kontakt-button:hover:enabled {
+  background-color: #005fa3;
+}
+
+.kontakt-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.kontakt-info {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.kontakt-success {
+  color: green;
+}
+
+.kontakt-error {
+  color: red;
+}
+
+.kontakt-captcha-code {
+  display: inline-block;
+  background-color: #eee;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-family: monospace;
+  font-weight: bold;
 }
