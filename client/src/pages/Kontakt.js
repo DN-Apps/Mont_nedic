@@ -20,6 +20,7 @@ function Kontakt() {
     const [captchaCorrect, setCaptchaCorrect] = useState(false);
     const [isLoadingCity, setIsLoadingCity] = useState(false);
     const [cityFound, setCityFound] = useState(false);
+    const API_URL = process.env.REACT_APP_API_URL;
 
     // Zufälliger 4-stelliger Zahlencode
     const generateCaptcha = () => {
@@ -98,7 +99,7 @@ function Kontakt() {
         }
 
         try {
-            const response = await fetch("http://localhost:5001/api/contact", {
+            const response = await fetch(`${API_URL}/api/booking`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
