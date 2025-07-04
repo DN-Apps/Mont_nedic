@@ -99,7 +99,7 @@ function Kontakt() {
         }
 
         try {
-            const response = await fetch(`${API_URL}/api/booking`, {
+            const response = await fetch(`${API_URL}/api/contact`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
