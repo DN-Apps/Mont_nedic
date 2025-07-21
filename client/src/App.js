@@ -28,6 +28,9 @@ function App() {
                 <div className="burger-menu" onClick={() => setMenuOpen(!menuOpen)}>
                     {menuOpen ? <FaTimes size={24} color="white" /> : <FaBars size={24} color="white" />}
                 </div>
+
+                <div className="site-title">Monteurzimmer Nedic</div>
+
                 <nav className={`menu ${menuOpen ? "open" : ""}`}>
                     <NavLink to="/" className="menu-item" onClick={() => setMenuOpen(false)}>
                         <FaHome /> <span>Home</span>
@@ -43,6 +46,7 @@ function App() {
                     </NavLink>
                 </nav>
             </header>
+
 
             <main className="main-content">
                 <Routes>

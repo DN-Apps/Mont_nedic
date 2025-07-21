@@ -1,78 +1,132 @@
+html,
 body {
+  height: 100%;
   margin: 0;
-  font-family: Arial, sans-serif;
+  padding: 0;
 }
 
 .App {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  margin-top: 7vh;
+  min-height: 100vh; /* Vollbildhöhe */
+  padding-top: 50px; /* Platz für fixierten Header */
+  box-sizing: border-box; /* wichtig, damit padding nicht rausrechnet */
 }
 
 .header {
   background-color: #333;
   color: white;
-  padding: 10px 0;
   position: fixed;
   top: 0;
   width: 100%;
   display: flex;
-  justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 15px;
   z-index: 1000;
-  height: 50px; /* Feste Höhe, um Platz für das Menü zu garantieren */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.site-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  margin: 5px 0;
+  white-space: nowrap;
+}
+
+.burger-menu {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 1100;
+  cursor: pointer;
 }
 
 .menu {
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  background-color: #333;
+  transition: all 0.3s ease-in-out;
+}
+
+.menu.open {
   display: flex;
-  justify-content: space-between;
-  width: 90%;
-  max-width: 600px;
 }
 
 .menu-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 6px 0;
   text-decoration: none;
   color: white;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 14px;
+}
+
+.menu-item svg {
+  font-size: 16px;
 }
 
 .menu-item:hover {
-  color: #ffcc00;
+  background-color: #444;
 }
 
-.auth-section {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  color: white;
-  font-size: 14px;
-  padding: 10px 15px;
+/* Desktop */
+@media (min-width: 769px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 20px;
+  }
+
+  .site-title {
+    font-size: 20px;
+    margin: 0;
+    position: static;
+  }
+
+  .burger-menu {
+    display: none;
+  }
+
+  .menu {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: transparent;
+    max-height: none;
+
+    /* Menü ca. 10% nach links schieben */
+    transform: translateX(-10%);
+  }
+
+  .menu-item {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .menu-item svg {
+    font-size: 14px;
+  }
 }
 
-main {
-  flex-grow: 1;
-}
-
-.main-content {
-  flex-grow: 1;
-}
-/* Footer-Styling */
+/* Footer */
 .footer {
+  flex-shrink: 0; /* Footer wird nicht kleiner */
   text-align: center;
   padding: 15px 0;
   background-color: #222;
   color: white;
-  position: relative;
-  width: 100vw;
-  margin-bottom: 0;
-  z-index: 1000;
+  width: 100%; /* Volle Breite, NICHT 100vw */
+  position: relative; /* Normal im Dokumentfluss */
+  box-sizing: border-box;
 }
 
-/* Impressum-Link im Footer */
 .impressum-link {
   background: none;
   border: none;
@@ -91,81 +145,12 @@ main {
   text-decoration: none;
 }
 
-/* ============================= */
-/* Mobile-Ansicht (Burger-Menü)  */
-/* ============================= */
-@media (max-width: 768px) {
-  .burger-menu {
-    display: block;
-    cursor: pointer;
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    z-index: 1100;
-  }
-
-  .burger-menu div {
-    width: 30px;
-    height: 4px;
-    background-color: #007bff;
-    margin: 6px 0;
-    transition: all 0.3s ease-in-out;
-  }
-
-  /* Das Menü ist standardmäßig ausgeblendet */
-  .menu {
-    position: relative;
-    width: 100%;
-    background-color: #333;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease-in-out;
-  }
-
-  /* Wenn das Menü geöffnet ist */
-  .menu.open {
-    min-height: 55vh; /* Dynamischer Platz für das Menü */
-    padding: 10px 0;
-    min-width: 100%;
-  }
-
-  /* Die .App bekommt zusätzlichen Abstand nach unten, wenn das Menü offen ist */
-  .App.menu-open {
-    margin-top: 200px; /* Schiebt den Inhalt nach unten */
-  }
-
-  /* Mobile Menüeinträge */
-  .menu-item {
-    padding: 8px 12px;
-    font-size: 12px;
-  }
-
-  .menu-item:hover {
-    background-color: #444;
-  }
+main {
+  flex-grow: 1;
 }
 
-/* ============================= */
-/* Desktop-Ansicht               */
-/* ============================= */
-@media (min-width: 769px) {
-  .burger-menu {
-    display: none;
-  }
-
-  .menu {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    position: static; /* Standardposition */
-  }
-
-  .menu-item {
-    font-size: 14px;
-    padding: 10px 15px;
-  }
+.main-content {
+  flex: 1 0 auto; /* Hauptinhalt wächst und nimmt Platz ein */
 }
 
 .login-container {

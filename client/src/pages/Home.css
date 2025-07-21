@@ -7,14 +7,16 @@ html {
 
 .home-container {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Zwei gleich große Spalten */
-  grid-template-rows: 1fr 1fr; /* Zwei gleich große Reihen */
-  height: 100vh; /* Volle Höhe des Bildschirms */
-  width: 100vw; /* Volle Breite des Bildschirms */
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  min-height: calc(
+    100vh - 50px - 60px
+  ); /* Höhe minus Header (50px) und Footer (~60px) */
+  width: 100vw;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  transition: margin-top 0.3s ease-in-out; /* Sanfte Animation für Menü */
+  transition: margin-top 0.3s ease-in-out;
 }
 
 /* Dynamischer Abstand, falls Menü geöffnet ist */
