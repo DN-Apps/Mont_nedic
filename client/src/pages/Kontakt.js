@@ -130,6 +130,7 @@ function Kontakt() {
             }
         } catch (err) {
             console.error("Fehler beim Senden:", err);
+            console.log("API URL:", process.env.REACT_APP_API_URL);
             alert("❌ Es gab ein Problem beim Versenden der Nachricht.");
         }
     };
