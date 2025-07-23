@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Kontakt.css";
+import { useTranslation } from "react-i18next";
 
 function Kontakt() {
     const [contactForm, setContactForm] = useState({
@@ -20,12 +21,10 @@ function Kontakt() {
     const [captchaCorrect, setCaptchaCorrect] = useState(false);
     const [isLoadingCity, setIsLoadingCity] = useState(false);
     const [cityFound, setCityFound] = useState(false);
+    const { t } = useTranslation();
     const API_URL = process.env.REACT_APP_API_URL;
 
-    // Zufälliger 4-stelliger Zahlencode
-    const generateCaptcha = () => {
-        return Math.floor(1000 + Math.random() * 9000).toString();
-    };
+    const generateCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
 
     useEffect(() => {
         setCaptchaCode(generateCaptcha());
@@ -37,8 +36,6 @@ function Kontakt() {
 
     const handleCountryChange = (value) => {
         handleContactFormChange("country", value);
-
-        // Stadt & PLZ zurücksetzen, wenn NICHT Deutschland
         if (value !== "Deutschland") {
             handleContactFormChange("postalCode", "");
             handleContactFormChange("city", "");
@@ -92,8 +89,8 @@ function Kontakt() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!captchaCorrect) {
-            alert("❌ Bitte lösen Sie das CAPTCHA korrekt.");
-            setCaptchaCode(generateCaptcha()); // neues CAPTCHA
+            alert(t('contact.errors.captcha'));
+            setCaptchaCode(generateCaptcha());
             setCaptchaInput("");
             return;
         }
@@ -109,7 +106,7 @@ function Kontakt() {
 
             const result = await response.json();
             if (result.success) {
-                alert("✅ Vielen Dank! Ihre Nachricht wurde gesendet.");
+                alert(t('contact.success'));
                 setContactForm({
                     salutation: "",
                     firstName: "",
@@ -126,44 +123,43 @@ function Kontakt() {
                 setCaptchaInput("");
                 setCaptchaCorrect(false);
             } else {
-                alert("❌ Fehler beim Senden: " + result.message);
+                alert(t('contact.errors.send') + result.message);
             }
         } catch (err) {
             console.error("Fehler beim Senden:", err);
-            console.log("API URL:", process.env.REACT_APP_API_URL);
-            alert("❌ Es gab ein Problem beim Versenden der Nachricht.");
+            alert(t('contact.errors.generic'));
         }
     };
 
     return (
         <div className="kontakt-container">
-            <h2>Kontakt</h2>
+            <h2>{t('contact.heading')}</h2>
             <form onSubmit={handleSubmit} className="kontakt-form">
                 <div className="kontakt-form-group">
                     <label>
-                        Anrede:
+                        {t('contact.salutation')}:
                         <select value={contactForm.salutation} onChange={e => handleContactFormChange("salutation", e.target.value)}>
-                            <option value="">Bitte wählen</option>
-                            <option value="Herr">Herr</option>
-                            <option value="Frau">Frau</option>
-                            <option value="Sonstige">Sonstige</option>
+                            <option value="">{t('contact.salutationOptions.pleaseSelect')}</option>
+                            <option value="Herr">{t('contact.salutationOptions.mr')}</option>
+                            <option value="Frau">{t('contact.salutationOptions.ms')}</option>
+                            <option value="Sonstige">{t('contact.salutationOptions.other')}</option>
                         </select>
                     </label>
 
                     <div className="kontakt-grid">
                         <label>
-                            Vorname:
+                            {t('contact.firstName')}:
                             <input type="text" value={contactForm.firstName} onChange={e => handleContactFormChange("firstName", e.target.value)} />
                         </label>
                         <label>
-                            Nachname:
+                            {t('contact.lastName')}:
                             <input type="text" value={contactForm.lastName} onChange={e => handleContactFormChange("lastName", e.target.value)} />
                         </label>
 
                         <label>
-                            Land:
+                            {t('contact.country')}:
                             <select value={contactForm.country} onChange={e => handleCountryChange(e.target.value)}>
-                                <option value="">Bitte wählen</option>
+                                <option value="">{t('contact.salutationOptions.pleaseSelect')}</option>
                                 <option>Deutschland</option>
                                 <option>Österreich</option>
                                 <option>Schweiz</option>
@@ -172,7 +168,7 @@ function Kontakt() {
                         </label>
 
                         <label>
-                            Postleitzahl:
+                            {t('contact.postalCode')}:
                             <input
                                 type="text"
                                 value={contactForm.postalCode}
@@ -180,17 +176,17 @@ function Kontakt() {
                                 maxLength="5"
                                 className={cityFound ? "input-success" : ""}
                             />
-                            {isLoadingCity && <small className="kontakt-info">🔍 Stadt wird gesucht…</small>}
-                            {cityFound && !isLoadingCity && <small className="kontakt-success">✓ Stadt gefunden</small>}
+                            {isLoadingCity && <small className="kontakt-info">{t('contact.loadingCity')}</small>}
+                            {cityFound && !isLoadingCity && <small className="kontakt-success">{t('contact.cityFound')}</small>}
                         </label>
 
                         <label>
-                            Stadt:
+                            {t('contact.city')}:
                             <input
                                 type="text"
                                 value={contactForm.city}
                                 readOnly={contactForm.country === "Deutschland"}
-                                placeholder={contactForm.country === "Deutschland" ? "Automatisch ausgefüllt" : "Bitte manuell eingeben"}
+                                placeholder={contactForm.country === "Deutschland" ? t('contact.placeholder.cityAuto') : t('contact.placeholder.cityManual')}
                                 onChange={e => handleContactFormChange("city", e.target.value)}
                                 className={contactForm.country === "Deutschland" ? "readonly-input" : ""}
                             />
@@ -198,70 +194,65 @@ function Kontakt() {
                     </div>
 
                     <label>
-                        Straße:
+                        {t('contact.street')}:
                         <input type="text" value={contactForm.street} onChange={e => handleContactFormChange("street", e.target.value)} />
                     </label>
 
-                    <div className="kontakt-grid">
-
-                    </div>
-
                     <label>
-                        Telefon:
+                        {t('contact.phone')}:
                         <input type="tel" value={contactForm.phone} onChange={e => handleContactFormChange("phone", e.target.value)} />
                     </label>
 
                     <label>
-                        E-Mail:
+                        {t('contact.email')}:
                         <input type="email" value={contactForm.email} onChange={e => handleContactFormChange("email", e.target.value)} required />
                     </label>
 
                     <label>
-                        Nachricht:
+                        {t('contact.message')}:
                         <textarea maxLength="500" value={contactForm.message} onChange={e => handleContactFormChange("message", e.target.value)} />
-                        <small className="kontakt-info">{500 - contactForm.message.length} Zeichen verbleibend</small>
+                        <small className="kontakt-info">
+                            {t('contact.remainingCharacters', { count: 500 - contactForm.message.length })}
+                        </small>
                     </label>
 
                     <label>
-                        Captcha-Code: <span className="kontakt-captcha-code">{captchaCode}
+                        {t('contact.captchaLabel')}: <span className="kontakt-captcha-code">{captchaCode}
                             <input
                                 type="text"
-                                placeholder="Captcha eingeben"
+                                placeholder={t('contact.placeholder.captcha')}
                                 value={captchaInput}
                                 onChange={e => handleCaptchaChange(e.target.value)}
                                 maxLength={4}
                             />
                             {captchaInput.length === 4 && !captchaCorrect && (
-                                <small className="kontakt-error">Captcha inkorrekt</small>
+                                <small className="kontakt-error">{t('contact.captchaIncorrect')}</small>
                             )}
                             {captchaInput.length === 4 && captchaCorrect && (
-                                <small className="kontakt-success">✓ Captcha korrekt</small>
+                                <small className="kontakt-success">{t('contact.captchaCorrect')}</small>
                             )}
                         </span>
                     </label>
 
                     <button type="submit" className="kontakt-button" disabled={!captchaCorrect}>
-                        Absenden
+                        {t('contact.submit')}
                     </button>
                 </div>
             </form>
 
             <div className="faq-section">
-                <h3>Häufig gestellte Fragen</h3>
+                <h3>{t('contact.faqTitle')}</h3>
                 <details>
-                    <summary>Wie viele Zimmer gibt es?</summary>
-                    <p>Wir bieten 3 Zimmer an:<br />2 Einbettzimmer, 1 Doppelbettzimmer.</p>
+                    <summary>{t('contact.faq.rooms.q')}</summary>
+                    <p>{t('contact.faq.rooms.a')}</p>
                 </details>
                 <details>
-                    <summary>Sind Internet und Parkmöglichkeiten im Preis inbegriffen?</summary>
-                    <p>Ja, es handelt sich um den Gesamtpreis für die Zimmer. Es entstehen keine weiteren Kosten für W-LAN oder Parkmöglichkeiten.</p>
+                    <summary>{t('contact.faq.included.q')}</summary>
+                    <p>{t('contact.faq.included.a')}</p>
                 </details>
                 <details>
-                    <summary>Wie kann ich Sie bei Fragen kontaktieren?</summary>
-                    <p>Bitte kontaktieren Sie uns unter:</p>
-                    <p>Mobil: +43 1701071715</p>
-                    <p>Mail: daniel-nedic@hotmail.de</p>
-                    <p>Daniel Nedic</p>
+                    <summary>{t('contact.faq.contact.q')}</summary>
+                    <p>{t('contact.faq.contact.a')}</p>
                 </details>
             </div>
         </div>

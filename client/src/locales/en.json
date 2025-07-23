@@ -1,0 +1,54 @@
+{
+  "contact": {
+    "heading": "Contact",
+    "salutation": "Salutation",
+    "salutationOptions": {
+      "pleaseSelect": "Please select",
+      "mr": "Mr",
+      "ms": "Ms",
+      "other": "Other"
+    },
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "street": "Street",
+    "postalCode": "Postal Code",
+    "city": "City",
+    "country": "Country",
+    "phone": "Phone",
+    "email": "Email",
+    "message": "Message",
+    "submit": "Submit",
+    "captchaLabel": "Captcha Code",
+    "captchaIncorrect": "Captcha incorrect",
+    "captchaCorrect": "✓ Captcha correct",
+    "success": "✅ Thank you! Your message has been sent.",
+    "errors": {
+      "captcha": "❌ Please solve the CAPTCHA correctly.",
+      "send": "❌ Error sending: ",
+      "generic": "❌ There was a problem sending your message."
+    },
+    "placeholder": {
+      "cityAuto": "Automatically filled in",
+      "cityManual": "Please enter manually",
+      "captcha": "Enter captcha"
+    },
+    "loadingCity": "🔍 Searching for city…",
+    "cityFound": "✓ City found",
+    "remainingCharacters": "{{count}} characters remaining",
+    "faqTitle": "Frequently Asked Questions",
+    "faq": {
+      "rooms": {
+        "q": "How many rooms are available?",
+        "a": "We offer 3 rooms:\n2 single rooms, 1 double room."
+      },
+      "included": {
+        "q": "Are internet and parking included in the price?",
+        "a": "Yes, the total price includes the rooms. There are no additional charges for Wi-Fi or parking."
+      },
+      "contact": {
+        "q": "How can I contact you with questions?",
+        "a": "Please contact us at:\nMobile: +43 1701071715\nEmail: daniel-nedic@hotmail.de\nDaniel Nedic"
+      }
+    }
+  }
+}

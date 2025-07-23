@@ -147,6 +147,7 @@ svg {
     border-bottom: 1px solid #ccc;
     padding-bottom: 20px;
     margin-bottom: 35px;
+    margin-top: 40px;
   }
 
   .grundriss-container svg {
@@ -236,5 +237,16 @@ svg {
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 50%;
+  }
+
+  @media (orientation: landscape) {
+    /* CSS-Regeln für den Landscape-Modus */
+    .permanentes-bild {
+      margin-top: 200px;
+    }
+    .galerie-container {
+      margin-top: 50px;
+    }
+    /*  Weitere Regeln für das Querformat */
   }
 }

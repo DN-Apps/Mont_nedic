@@ -5,6 +5,8 @@ import Startseite from "./pages/Startseite";
 import Zimmer from "./pages/Zimmer";
 import Buchung from "./pages/Buchung";
 import Kontakt from "./pages/Kontakt";
+import LanguageSelector from "./components/LanguageSelector"
+import './i18n.js';
 import "./App.css";
 
 import PrivacyNotice from "./components/PrivacyNotice";
@@ -45,6 +47,8 @@ function App() {
                         <FaEnvelope /> <span>Kontakt</span>
                     </NavLink>
                 </nav>
+                <LanguageSelector></LanguageSelector>
+
             </header>
 
 

@@ -1,0 +1,54 @@
+{
+  "contact": {
+    "heading": "Kontakt",
+    "salutation": "Anrede",
+    "salutationOptions": {
+      "pleaseSelect": "Bitte wählen",
+      "mr": "Herr",
+      "ms": "Frau",
+      "other": "Sonstige"
+    },
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "street": "Straße",
+    "postalCode": "Postleitzahl",
+    "city": "Stadt",
+    "country": "Land",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "message": "Nachricht",
+    "submit": "Absenden",
+    "captchaLabel": "Captcha-Code",
+    "captchaIncorrect": "Captcha inkorrekt",
+    "captchaCorrect": "✓ Captcha korrekt",
+    "success": "✅ Vielen Dank! Ihre Nachricht wurde gesendet.",
+    "errors": {
+      "captcha": "❌ Bitte lösen Sie das CAPTCHA korrekt.",
+      "send": "❌ Fehler beim Senden: ",
+      "generic": "❌ Es gab ein Problem beim Versenden der Nachricht."
+    },
+    "placeholder": {
+      "cityAuto": "Automatisch ausgefüllt",
+      "cityManual": "Bitte manuell eingeben",
+      "captcha": "Captcha eingeben"
+    },
+    "loadingCity": "🔍 Stadt wird gesucht…",
+    "cityFound": "✓ Stadt gefunden",
+    "remainingCharacters": "{{count}} Zeichen verbleibend",
+    "faqTitle": "Häufig gestellte Fragen",
+    "faq": {
+      "rooms": {
+        "q": "Wie viele Zimmer gibt es?",
+        "a": "Wir bieten 3 Zimmer an:\n2 Einbettzimmer, 1 Doppelbettzimmer."
+      },
+      "included": {
+        "q": "Sind Internet und Parkmöglichkeiten im Preis inbegriffen?",
+        "a": "Ja, es handelt sich um den Gesamtpreis für die Zimmer. Es entstehen keine weiteren Kosten für W-LAN oder Parkmöglichkeiten."
+      },
+      "contact": {
+        "q": "Wie kann ich Sie bei Fragen kontaktieren?",
+        "a": "Bitte kontaktieren Sie uns unter:\nMobil: +43 1701071715\nMail: daniel-nedic@hotmail.de\nDaniel Nedic"
+      }
+    }
+  }
+}
