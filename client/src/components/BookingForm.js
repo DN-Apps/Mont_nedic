@@ -10,6 +10,8 @@ function BookingForm() {
     const [isPeriodVisible, setIsPeriodVisible] = useState(false);
     const [isRoomsVisible, setIsRoomsVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoadingCity, setIsLoadingCity] = useState(false);
+    const [cityFound, setCityFound] = useState(false);
     const API_URL = process.env.REACT_APP_API_URL;
 
 
@@ -86,6 +88,56 @@ function BookingForm() {
             ...prev,
             [field]: value,
         }));
+    };
+
+    //Für PLZ Suche
+    const handleCountryChange = (value) => {
+        handleContactFormChange("country", value);
+
+        // Stadt & PLZ zurücksetzen, wenn NICHT Deutschland
+        if (value !== "Deutschland") {
+            handleContactFormChange("postalCode", "");
+            handleContactFormChange("city", "");
+            setCityFound(false);
+        }
+    };
+
+    const searchCityByPostalCode = async (postalCode) => {
+        try {
+            setIsLoadingCity(true);
+            const resp = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&countrycodes=de&postalcode=${postalCode}&limit=5`,
+                { headers: { 'User-Agent': 'Monteurzimmer Gundelsheim' } }
+            );
+            const data = await resp.json();
+            if (data?.length > 0) {
+                const parts = data[0].display_name.split(",").map(p => p.trim());
+                return parts.length >= 3 ? parts[2] : "";
+            }
+            return "";
+        } catch (e) {
+            console.error("Fehler bei der Stadtsuche:", e);
+            return "";
+        } finally {
+            setIsLoadingCity(false);
+        }
+    };
+
+    const handlePostalCodeChange = async (value) => {
+        handleContactFormChange("postalCode", value);
+        handleContactFormChange("city", "");
+        setCityFound(false);
+
+        const cleaned = value.replace(/\s/g, "");
+        const isGermanPLZ = /^\d{5}$/.test(cleaned);
+
+        if (contactForm.country === "Deutschland" && isGermanPLZ) {
+            const city = await searchCityByPostalCode(cleaned);
+            if (city) {
+                handleContactFormChange("city", city);
+                setCityFound(true);
+            }
+        }
     };
 
     const calculateDateDifference = () => {
@@ -277,12 +329,9 @@ function BookingForm() {
                             <label>Vorname:<input type="text" value={contactForm.firstName} onChange={(e) => handleContactFormChange("firstName", e.target.value)} /></label>
                             <label>Nachname:<input type="text" value={contactForm.lastName} onChange={(e) => handleContactFormChange("lastName", e.target.value)} /></label>
                             <label>Firma (optional):<input type="text" value={contactForm.company} onChange={(e) => handleContactFormChange("company", e.target.value)} /></label>
-                            <label>Straße:<input type="text" value={contactForm.street} onChange={(e) => handleContactFormChange("street", e.target.value)} /></label>
-                            <label>Postleitzahl:<input type="text" value={contactForm.postalCode} onChange={(e) => handleContactFormChange("postalCode", e.target.value)} /></label>
-                            <label>Stadt:<input type="text" value={contactForm.city} onChange={(e) => handleContactFormChange("city", e.target.value)} /></label>
                             <label>
                                 Land:
-                                <select value={contactForm.country} onChange={(e) => handleContactFormChange("country", e.target.value)}>
+                                <select value={contactForm.country} onChange={e => handleCountryChange(e.target.value)}>
                                     <option value="">Bitte auswählen</option>
                                     <option value="Deutschland">Deutschland</option>
                                     <option value="Frankreich">Frankreich</option>
@@ -292,6 +341,18 @@ function BookingForm() {
                                     <option value="Schweiz">Schweiz</option>
                                 </select>
                             </label>
+                            <label>Postleitzahl:
+                                <input type="text"
+                                    value={contactForm.postalCode}
+                                    onChange={e => handlePostalCodeChange(e.target.value)}
+                                    maxLength="5"
+                                />
+                                {isLoadingCity && <small className="kontakt-info">🔍 Stadt wird gesucht…</small>}
+                                {cityFound && !isLoadingCity && <small className="kontakt-success">✓ Stadt gefunden</small>} </label>
+                            <label>Stadt:<input type="text" readOnly={contactForm.country === "Deutschland"} value={contactForm.city} onChange={(e) => handleContactFormChange("city", e.target.value)} placeholder={contactForm.country === "Deutschland" ? "Automatisch ausgefüllt" : "Bitte manuell eingeben"} /></label>
+                            <label>Straße:<input type="text" value={contactForm.street} onChange={(e) => handleContactFormChange("street", e.target.value)} /></label>
+
+
                             <label>Tel./Mobil:<input type="tel" value={contactForm.phone} onChange={(e) => handleContactFormChange("phone", e.target.value)} /></label>
                             <label>E-Mail:<input type="email" value={contactForm.email} onChange={(e) => handleContactFormChange("email", e.target.value)} required /></label>
                         </div>
