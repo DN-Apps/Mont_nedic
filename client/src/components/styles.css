@@ -47,10 +47,41 @@ body {
 /* ========================== */
 @media (max-width: 768px) {
   .bookingform {
-    width: 95%;
+    width: 85%;
     padding: 15px;
     border-radius: 0;
     box-shadow: none;
+  }
+
+  .rdrCalendarWrapper {
+    transform: scale(0.95);
+    transform-origin: top left;
+  }
+
+  .rdrMonthAndYearWrapper {
+    font-size: 14px;
+    padding: 4px;
+  }
+
+  .rdrDayNumber span {
+    font-size: 12px;
+  }
+
+  .rdrMonth {
+    padding: 5px;
+  }
+
+  .rdrWeekDays {
+    font-size: 11px;
+  }
+
+  .rdrDateDisplay {
+    font-size: 12px;
+  }
+
+  .rdrDay {
+    width: 35px;
+    height: 35px;
   }
 
   /* Fortschrittsbalken kompakter */

@@ -3,6 +3,7 @@ import { DateRange } from "react-date-range";
 import { de } from "date-fns/locale";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import "./styles.css"
 
 function DatePicker({ selectedDates, setSelectedDates, initiallyOpen = false, readOnly = false }) {
     const [isOpen, setIsOpen] = useState(initiallyOpen);
@@ -49,6 +50,7 @@ function DatePicker({ selectedDates, setSelectedDates, initiallyOpen = false, re
                     cursor: "pointer",
                     borderRadius: "5px",
                     marginBottom: "10px",
+
                 }}
                 onClick={toggleOpen}
             >
