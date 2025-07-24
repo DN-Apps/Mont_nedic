@@ -103,6 +103,11 @@
         "room1": "Zimmer 1",
         "room2": "Zimmer 2",
         "room3": "Zimmer 3"
+      },
+      "sending": {
+        "success": "Buchungsanfrage erfolgreich versendet! Sie erhalten eine Bestätigungsmail.",
+        "errorTitle": "Fehler:",
+        "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
       }
     },
     "step1": {
@@ -182,6 +187,9 @@
   },
   "site": {
     "title": "Monteurzimmer Nedic",
-    "imprint": "Impressum"
+    "imprint": "Impressum",
+    "privacyNoticeTitle": "Datenschutzhinweis",
+    "privacyNoticeContent": "Wir verwenden Cookies und andere Technologien, um Ihre Erfahrung zu verbessern. Bitte akzeptieren Sie unseren Datenschutzhinweis.",
+    "privacyNoticeAccept": "Akzeptieren"
   }
 }

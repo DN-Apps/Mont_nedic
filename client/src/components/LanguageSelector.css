@@ -1,5 +1,8 @@
 .lang-sel-container {
+  top: 10px;
   margin-right: 5vw;
+  z-index: 9999;
+  width: 190px;
 }
 
 @media (max-width: 768px) {

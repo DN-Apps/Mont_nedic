@@ -176,7 +176,7 @@ function BookingForm() {
             const result = await response.json();
 
             if (result.success) {
-                alert("Buchungsanfrage erfolgreich versendet! Sie erhalten eine Bestätigungsmail.");
+                alert(t("booking.sending.success"));
                 // Optional: Formular zurücksetzen oder zu einer Erfolgsseite weiterleiten
                 setStep(1);
                 setBookingDates(null);
@@ -194,11 +194,11 @@ function BookingForm() {
                     email: "",
                 });
             } else {
-                alert("Fehler beim Versenden: " + result.message);
+                alert(t("booking.sending.errorTitle") + result.message);
             }
         } catch (error) {
-            console.error("Fehler:", error);
-            alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.");
+            console.error(t("booking.sending.errorTitle"), error);
+            alert(t("booking.sending.error"));
         } finally {
             setIsSubmitting(false);
         }

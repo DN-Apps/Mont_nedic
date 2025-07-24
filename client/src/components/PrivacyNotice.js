@@ -1,9 +1,11 @@
 // src/components/PrivacyNotice.jsx
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import "./PrivacyNotice.css";
 
 export default function PrivacyNotice() {
     const [accepted, setAccepted] = useState(false);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const stored = localStorage.getItem("privacyAccepted");
@@ -18,13 +20,13 @@ export default function PrivacyNotice() {
     if (accepted) return null;
 
     return (
-        <div className="popup-overlay">
+        <div className="popup-overlay" style={{ backgroundColor: "transparent", backdropFilter: "none", filter: "none" }}>
             <div className="popup-content">
-                <h2>Datenschutzhinweis</h2>
+                <h2>{t("site.privacyNoticeTitle")}</h2>
                 <p>
-                    Wir verwenden Cookies und andere Technologien, um Ihre Erfahrung zu verbessern. Bitte akzeptieren Sie unseren Datenschutzhinweis.
+                    {t("site.privacyNoticeContent")}
                 </p>
-                <button onClick={accept}>Akzeptieren</button>
+                <button onClick={accept}>{t("site.privacyNoticeAccept")}</button>
             </div>
         </div>
     );
