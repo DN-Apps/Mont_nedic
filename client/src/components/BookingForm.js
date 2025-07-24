@@ -176,7 +176,7 @@ function BookingForm() {
             const result = await response.json();
 
             if (result.success) {
-                alert(t("booking.sending.success"));
+                alert(t('booking.sending.success'));
                 // Optional: Formular zurücksetzen oder zu einer Erfolgsseite weiterleiten
                 setStep(1);
                 setBookingDates(null);
@@ -194,11 +194,11 @@ function BookingForm() {
                     email: "",
                 });
             } else {
-                alert(t("booking.sending.errorTitle") + result.message);
+                alert(t('booking.sending.errorTitle') + result.message);
             }
         } catch (error) {
-            console.error(t("booking.sending.errorTitle"), error);
-            alert(t("booking.sending.error"));
+            console.error(t('booking.sending.errorTitle'), error);
+            alert(t('booking.sending.error'));
         } finally {
             setIsSubmitting(false);
         }
