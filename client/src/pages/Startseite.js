@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Home from "../assets/home_new.jpeg";
 import Flur from "../assets/flur.jpeg";
 import Flur2 from "../assets/flurRechts.jpeg"
@@ -8,72 +9,73 @@ import Portrait from "../assets/portrait_transparent.png"
 import "./Home.css";
 
 function Startseite() {
+
+    const { t } = useTranslation();
     return (
         <div className="home-container">
             {/* Links oben: Begrüßungstext */}
             <div className="home-section top-left">
-                <h1>Herzlich Willkommen - Monteurzimmer Nedic</h1>
+                <h1>{t('home.welcome.title')}</h1>
                 <h4>
-                    Unsere Unterkunft befindet sich in der malerischen Altstadt Gundelsheims.<br></br>
-                    Aufgrund der zentralen Lage erfreuen sich die Monteurzimmer Nedic sehr großer Beliebtheit.
+                    {t('home.welcome.text')}
                 </h4>
                 <div className="amenities">
                     <div className="amenity">
-                        <i className="fas fa-briefcase"></i> Arbeitstisch
+                        <i className="fas fa-briefcase"></i> {t('home.amenities.desk')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-bed"></i> Bettwäsche inklusive
+                        <i className="fas fa-bed"></i> {t('home.amenities.bedLinen')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-user-friends"></i> Getrennte Betten
+                        <i className="fas fa-user-friends"></i> {t('home.amenities.separateBeds')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-tshirt"></i> Handtücher inklusive
+                        <i className="fas fa-tshirt"></i> {t('home.amenities.towels')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-wifi"></i> W-LAN
+                        <i className="fas fa-wifi"></i> {t('home.amenities.wifi')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-coffee"></i> Kaffeemaschine
+                        <i className="fas fa-coffee"></i> {t('home.amenities.coffeeMachine')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-utensils"></i> Spülmaschine
+                        <i className="fas fa-utensils"></i> {t('home.amenities.dishwasher')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-snowflake"></i> Kühlschrank
+                        <i className="fas fa-snowflake"></i> {t('home.amenities.fridge')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-fire"></i> Kochmöglichkeit
+                        <i className="fas fa-fire"></i> {t('home.amenities.cookingFacilities')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-microchip"></i> Mikrowelle
+                        <i className="fas fa-microchip"></i> {t('home.amenities.microwave')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-bath"></i> Gemeinschaftsbad
+                        <i className="fas fa-bath"></i> {t('home.amenities.sharedBathroom')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-shower"></i> Dusche
+                        <i className="fas fa-shower"></i> {t('home.amenities.shower')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-mug-hot"></i> Wasserkocher
+                        <i className="fas fa-mug-hot"></i> {t('home.amenities.kettle')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-toilet"></i> WC
+                        <i className="fas fa-toilet"></i> {t('home.amenities.toilet')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-tshirt"></i> Waschmaschine
+                        <i className="fas fa-tshirt"></i> {t('home.amenities.washingMachine')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-store"></i> Geschäfte in der Nähe
+                        <i className="fas fa-store"></i> {t('home.amenities.nearbyShops')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-peace"></i> Ruhige Lage
+                        <i className="fas fa-peace"></i> {t('home.amenities.quietLocation')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-smoking"></i> Raucher
+                        <i className="fas fa-smoking"></i> {t('home.amenities.smokingAllowed')}
                     </div>
                     <div className="amenity">
-                        <i className="fas fa-road"></i> Gute Verkehrsanbindung
+                        <i className="fas fa-road"></i> {t('home.amenities.goodTransport')}
                     </div>
                 </div>
             </div>

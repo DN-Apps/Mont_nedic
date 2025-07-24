@@ -50,5 +50,136 @@
         "a": "Please contact us at:\nMobile: +43 1701071715\nEmail: daniel-nedic@hotmail.de\nDaniel Nedic"
       }
     }
+  },
+  "home": {
+    "amenities": {
+      "desk": "Work desk",
+      "bedLinen": "Bed linen included",
+      "separateBeds": "Separate beds",
+      "towels": "Towels included",
+      "wifi": "Wi-Fi",
+      "coffeeMachine": "Coffee machine",
+      "dishwasher": "Dishwasher",
+      "fridge": "Refrigerator",
+      "cookingFacilities": "Cooking facilities",
+      "microwave": "Microwave",
+      "sharedBathroom": "Shared bathroom",
+      "shower": "Shower",
+      "kettle": "Electric kettle",
+      "toilet": "Toilet",
+      "washingMachine": "Washing machine",
+      "nearbyShops": "Shops nearby",
+      "quietLocation": "Quiet location",
+      "smokingAllowed": "Smoking allowed",
+      "goodTransport": "Good transport connections"
+    },
+    "welcome": {
+      "title": "Welcome - Monteurzimmer Nedic",
+      "text": "Our accommodation is located in the picturesque old town of Gundelsheim.\nDue to its central location, Monteurzimmer Nedic is very popular."
+    }
+  },
+  "rooms": {
+    "gallery": "Gallery",
+    "floorPlan": "Apartment floor plan"
+  },
+  "booking": {
+    "general": {
+      "pricing": {
+        "1night": "1 night",
+        "1week": "1 week",
+        "1month": "1 month"
+      },
+      "buttons": {
+        "buttonContinue": "Next",
+        "buttonBack": "Back"
+      },
+      "availability": {
+        "free": "Free",
+        "occupied": "occupied"
+      },
+      "rooms": {
+        "room1": "Room 1",
+        "room2": "Room 2",
+        "room3": "Room 3"
+      }
+    },
+    "step1": {
+      "step": "Step",
+      "of": "of",
+      "bookingDate": "Booking date"
+    },
+    "step2": {
+      "roomSelection": "Room selection",
+      "period": "Period",
+      "selectedRooms": "Selected rooms:",
+      "noSelection": "No rooms selected",
+      "add": "Add room",
+      "delete": "Delete room",
+      "night": "night",
+      "totalCosts": "Total costs"
+    },
+    "step3": {
+      "contactInformation": "Contact Information",
+      "bookingPeriod": "Booking Period",
+      "period": "Period",
+      "duration": "Duration",
+      "nights": "nights",
+      "selectedRooms": "Selected rooms",
+      "totalCostsFor": "Total costs for",
+      "night": "night",
+      "salutation": "Salutation",
+      "selectSalutation": "Please select",
+      "mr": "Mr",
+      "ms": "Ms",
+      "other": "Other",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "companyOpt": "Company (optional)",
+      "country": "Country",
+      "selectCountry": "Please select country...",
+      "postalCode": "Zip code",
+      "searchingForCity": "Searching for city...",
+      "cityFound": "City found",
+      "autoFilled": "Auto-filled",
+      "manuallyFilled": "Please enter manually",
+      "city": "City",
+      "street": "Street & number",
+      "mobile": "Mobile",
+      "mail": "Email"
+    },
+    "step4": {
+      "summary": "Summary",
+      "bookingPeriod": "Booking period",
+      "period": "Period",
+      "duration": "Duration",
+      "nights": "nights",
+      "selectedRooms": "Selected rooms",
+      "totalCostsFor": "Total costs for",
+      "night": "night",
+      "totalCosts": "Total costs",
+      "contactInformation": "Contact Information",
+      "salutation": "Salutation",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "company": "Company",
+      "street": "Street & number",
+      "postalCode": "Zip code",
+      "city": "City",
+      "country": "Country",
+      "mobile": "Mobile",
+      "mail": "Email",
+      "pendingSending": "Pending...",
+      "requestBooking": "Request booking"
+    }
+  },
+  "menu": {
+    "home": "Home",
+    "rooms": "Rooms",
+    "booking": "Booking",
+    "contact": "Contact"
+  },
+  "site": {
+    "title": "Monteur Rooms Nedic",
+    "imprint": "Imprint"
   }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Bad from "../assets/Bad.jpg";
 import Kueche from "../assets/Kueche.jpg";
 import Zimmer1 from "../assets/zimmer2.jpeg";
@@ -13,6 +14,7 @@ function Zimmer() {
 
     // Wir speichern den Index des aktiven Bildes (statt nur das Bild selbst)
     const [activeIndex, setActiveIndex] = useState(null);
+    const { t } = useTranslation();
 
     const points = [
         { id: 1, x: 180, y: 450, label: "Treppe", image: Treppe },
@@ -51,7 +53,7 @@ function Zimmer() {
         <div className="zimmer-container">
             {/* Linke Seite: Grundriss */}
             <div className="grundriss-container">
-                <h2>Wohnungsgrundriss</h2>
+                <h2>{t('rooms.floorPlan')}</h2>
                 <svg
                     width="100%"
                     height="100%"
@@ -104,7 +106,7 @@ function Zimmer() {
 
                 {/* Galerie */}
                 <div className="galerie-container">
-                    <h2>Galerie</h2>
+                    <h2>{t('rooms.gallery')}</h2>
                     <div className="galerie-grid">
                         {points.map((point, index) => (
                             <img

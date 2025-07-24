@@ -242,7 +242,7 @@ svg {
   @media (orientation: landscape) {
     /* CSS-Regeln für den Landscape-Modus */
     .permanentes-bild {
-      margin-top: 200px;
+      margin-top: 250px;
     }
     .galerie-container {
       margin-top: 50px;

@@ -50,5 +50,138 @@
         "a": "Bitte kontaktieren Sie uns unter:\nMobil: +43 1701071715\nMail: daniel-nedic@hotmail.de\nDaniel Nedic"
       }
     }
+  },
+  "home": {
+    "amenities": {
+      "desk": "Arbeitstisch",
+      "bedLinen": "Bettwäsche inklusive",
+      "separateBeds": "Getrennte Betten",
+      "towels": "Handtücher inklusive",
+      "wifi": "W-LAN",
+      "coffeeMachine": "Kaffeemaschine",
+      "dishwasher": "Spülmaschine",
+      "fridge": "Kühlschrank",
+      "cookingFacilities": "Kochmöglichkeit",
+      "microwave": "Mikrowelle",
+      "sharedBathroom": "Gemeinschaftsbad",
+      "shower": "Dusche",
+      "kettle": "Wasserkocher",
+      "toilet": "WC",
+      "washingMachine": "Waschmaschine",
+      "nearbyShops": "Geschäfte in der Nähe",
+      "quietLocation": "Ruhige Lage",
+      "smokingAllowed": "Raucher",
+      "goodTransport": "Gute Verkehrsanbindung"
+    },
+    "welcome": {
+      "title": "Herzlich Willkommen - Monteurzimmer Nedic",
+      "text": "Unsere Unterkunft befindet sich in der malerischen Altstadt Gundelsheims.\nAufgrund der zentralen Lage erfreuen sich die Monteurzimmer Nedic sehr großer Beliebtheit."
+    }
+  },
+  "rooms": {
+    "gallery": "Galerie",
+    "floorPlan": "Wohnungsgrundriss"
+  },
+  "booking": {
+    "general": {
+      "pricing": {
+        "1night": "1 Nacht",
+        "1week": "1 Woche",
+        "1month": "1 Monat"
+      },
+      "buttons": {
+        "buttonContinue": "Weiter",
+        "buttonBack": "Zurück",
+        "pending": "Wird versendet",
+        "requestBooking": "Buchung anfragen"
+      },
+      "availability": {
+        "free": "Frei",
+        "occupied": "Belegt"
+      },
+      "rooms": {
+        "room1": "Zimmer 1",
+        "room2": "Zimmer 2",
+        "room3": "Zimmer 3"
+      }
+    },
+    "step1": {
+      "step": "Schritt",
+      "of": "von",
+      "bookingDate": "Buchungsdatum"
+    },
+    "step2": {
+      "roomSelection": "Zimmerauswahl",
+      "period": "Zeitraum",
+      "selectedRooms": "Gewählte Zimmer",
+      "noSelection": "Keine Zimmer ausgewählt",
+      "add": "Zimmer hinzufügen",
+      "delete": "Zimmer entfernen",
+      "night": "Nacht",
+      "totalCosts": "Gesamtkosten"
+    },
+    "step3": {
+      "contactInformation": "Kontaktdaten",
+      "bookingPeriod": "Buchungszeitraum",
+      "period": "Zeitraum",
+      "duration": "Dauer",
+      "nights": "Nächte",
+      "selectedRooms": "Gewählte Zimmer",
+      "totalCostsFor": "Gesamtkosten für",
+      "night": "Nacht",
+      "salutation": "Anrede",
+      "selectSalutation": "Bitte auswählen",
+      "mr": "Herr",
+      "ms": "Frau",
+      "other": "Sonstige",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "companyOpt": "Firma (optional)",
+      "country": "Land",
+      "selectCountry": "Bitte Land wählen...",
+      "postalCode": "Postleitzahl",
+      "searchingForCity": "Suche nach Stadt...",
+      "cityFound": "Stadt gefunden",
+      "autoFilled": "Automatisch ausgefüllt",
+      "city": "Stadt",
+      "manuallyFilled": "Bitte manuell eingeben",
+      "street": "Straße & Hausnummer",
+      "mobile": "Tel./Mobil",
+      "mail": "E-Mail"
+    },
+    "step4": {
+      "summary": "Zusammenfassung",
+      "bookingPeriod": "Buchungszeitraum",
+      "period": "Zeitraum",
+      "duration": "Dauer",
+      "nights": "Nächte",
+      "selectedRooms": "Gewählte Zimmer",
+      "totalCostsFor": "Gesamtkosten für",
+      "night": "Nacht",
+      "totalCosts": "Gesamtkosten",
+      "contactInformation": "Kontaktdaten",
+      "salutation": "Anrede",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "company": "Firma",
+      "street": "Straße & Hausnummer",
+      "postalCode": "Postleitzahl",
+      "city": "Stadt",
+      "country": "Land",
+      "mobile": "Tel./Mobil",
+      "mail": "E-Mail",
+      "pendingSending": "Wird versendet...",
+      "requestBooking": "Buchung anfragen"
+    }
+  },
+  "menu": {
+    "home": "Home",
+    "rooms": "Zimmer",
+    "booking": "Buchung",
+    "contact": "Kontakt"
+  },
+  "site": {
+    "title": "Monteurzimmer Nedic",
+    "imprint": "Impressum"
   }
 }

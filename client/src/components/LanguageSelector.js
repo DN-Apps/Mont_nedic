@@ -70,7 +70,7 @@ function LanguageSelector() {
                 onChange={handleChange}
                 formatOptionLabel={formatOptionLabel}
                 isSearchable={false}
-                classNamePrefix="select"
+                classNamePrefix="select language"
                 styles={customStyles}
             />
         </div>

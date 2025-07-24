@@ -1,29 +1,33 @@
 import React, { useState } from 'react';
 import './RoomDetails.css';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
-const rooms = [
-  {
-    id: 1,
-    name: 'Zimmer 1',
-    status: 'frei',
-    details: '2 Einzelbetten, Schreibtisch, Kleiderschrank',
-  },
-  {
-    id: 2,
-    name: 'Zimmer 2',
-    status: 'belegt',
-    details: '1 Einzelbett, Schreibtisch, Kleiderschrank',
-  },
-  {
-    id: 3,
-    name: 'Zimmer 3',
-    status: 'frei',
-    details: '1 Einzelbett, Schreibtisch, Kleiderschrank',
-  },
-];
 
 function RoomDetails() {
+  const { t } = useTranslation();
+
+  const rooms = [
+    {
+      id: 1,
+      name: t('booking.general.rooms.room1'),
+      status: t('booking.general.availability.free'),
+      details: '2 Einzelbetten, Schreibtisch, Kleiderschrank',
+    },
+    {
+      id: 2,
+      name: t('booking.general.rooms.room2'),
+      status: t('booking.general.availability.occupied'),
+      details: '1 Einzelbett, Schreibtisch, Kleiderschrank',
+    },
+    {
+      id: 3,
+      name: t('booking.general.rooms.room3'),
+      status: t('booking.general.availability.free'),
+      details: '1 Einzelbett, Schreibtisch, Kleiderschrank',
+    },
+  ];
+
   const [openRoomIds, setOpenRoomIds] = useState([]);
 
   const toggleDetails = (id) => {
@@ -40,15 +44,15 @@ function RoomDetails() {
     <div className="room-wrapper">
       <div className="pricing-box">
         <div className="price-item">
-          <span className="label">1 Nacht</span>
+          <span className="label">{t('booking.general.pricing.1night')}</span>
           <span className="value">20 €</span>
         </div>
         <div className="price-item">
-          <span className="label">7 Nächte</span>
+          <span className="label">{t('booking.general.pricing.1week')}</span>
           <span className="value">100 €</span>
         </div>
         <div className="price-item">
-          <span className="label">1 Monat</span>
+          <span className="label">{t('booking.general.pricing.1month')}</span>
           <span className="value">400 €</span>
         </div>
       </div>

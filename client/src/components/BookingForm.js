@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import DatePicker from "./DatePicker";
 import "./styles.css";
 import RoomDetails from "../pages/RoomDetails";
@@ -12,6 +13,7 @@ function BookingForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoadingCity, setIsLoadingCity] = useState(false);
     const [cityFound, setCityFound] = useState(false);
+    const { t } = useTranslation();
     const API_URL = process.env.REACT_APP_API_URL;
 
 
@@ -202,7 +204,7 @@ function BookingForm() {
         }
     };
 
-    const steps = ["Buchungsdatum", "Zimmerauswahl", "Kontaktdaten", "Zusammenfassung"];
+    const steps = [t(t('booking.step1.bookingDate')), t('booking.step2.roomSelection'), t('booking.step3.contactInformation'), "Zusammenfassung"];
 
     return (
         <div>
@@ -226,11 +228,11 @@ function BookingForm() {
                     ))}
                 </div>
 
-                <h2>Schritt {step} von 4</h2>
+                <h2>{t('booking.step1.step')} {step} {t('booking.step1.of')} 4</h2>
 
                 {step === 1 && (
                     <div>
-                        <h3>Buchungsdatum</h3>
+                        <h3>{t('booking.step1.bookingDate')}</h3>
                         <DatePicker
                             selectedDates={bookingDates}
                             setSelectedDates={setBookingDates}
@@ -238,7 +240,7 @@ function BookingForm() {
                             readOnly={false}
                         />
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-                            <button onClick={goToPreviousStep} disabled={step === 1} style={buttonStyle}>Zurück</button>
+                            <button onClick={goToPreviousStep} disabled={step === 1} style={buttonStyle}>{t('booking.general.buttons.buttonBack')}</button>
                             <button
                                 onClick={goToNextStep}
                                 disabled={isNextDisabled}
@@ -247,92 +249,92 @@ function BookingForm() {
                                     backgroundColor: isNextDisabled ? "#ccc" : "#007BFF",
                                     cursor: isNextDisabled ? "not-allowed" : "pointer",
                                 }}
-                            >Weiter</button>
+                            >{t('booking.general.buttons.buttonContinue')}</button>
                         </div>
                     </div>
                 )}
 
                 {step === 2 && (
                     <div>
-                        <h3>Zimmerauswahl</h3>
+                        <h3>{t('booking.step2.roomSelection')}</h3>
                         <DatePicker
                             selectedDates={bookingDates}
                             setSelectedDates={setBookingDates}
                             initiallyOpen={false}
                             readOnly={true}
                         />
-                        <p>Zeitraum: {`${bookingDates.startDate.toLocaleDateString("de-DE")} - ${bookingDates.endDate.toLocaleDateString("de-DE")}`}</p>
+                        <p>{t('booking.step2.period')}: {`${bookingDates.startDate.toLocaleDateString("de-DE")} - ${bookingDates.endDate.toLocaleDateString("de-DE")}`}</p>
 
                         <div style={{ margin: "20px 0" }}>
-                            <h4>Gewählte Zimmer:</h4>
-                            {selectedRooms.length === 0 && <p>Keine Zimmer ausgewählt.</p>}
+                            <h4>{t('booking.step2.selectedRooms')}:</h4>
+                            {selectedRooms.length === 0 && <p>{t('booking.step2.noSelection')}.</p>}
                             {selectedRooms.map((room) => (
                                 <div key={room.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px", marginBottom: "10px", border: "1px solid #ddd", borderRadius: "5px" }}>
-                                    <span>{room.type} - {room.pricePerDay}€/Tag</span>
-                                    <button onClick={() => removeRoom(room.id)} style={{ backgroundColor: "red", color: "white", border: "none", padding: "5px 10px", cursor: "pointer", borderRadius: "5px" }}>Entfernen</button>
+                                    <span>{room.type} - {room.pricePerDay}€/{t('booking.step2.night')}</span>
+                                    <button onClick={() => removeRoom(room.id)} style={{ backgroundColor: "red", color: "white", border: "none", padding: "5px 10px", cursor: "pointer", borderRadius: "5px" }}>{t('booking.step2.delete')}</button>
                                 </div>
                             ))}
                         </div>
 
                         {selectedRooms.length < 3 && (
-                            <button onClick={addRoom} style={{ ...buttonStyle, backgroundColor: "#28a745" }}>Zimmer hinzufügen</button>
+                            <button onClick={addRoom} style={{ ...buttonStyle, backgroundColor: "#28a745" }}>{t('booking.step2.add')}</button>
                         )}
 
-                        <h4>Gesamtkosten: {calculateTotal()}€</h4>
+                        <h4>{t('booking.step2.totalCosts')}: {calculateTotal()}€</h4>
 
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-                            <button onClick={goToPreviousStep} style={buttonStyle}>Zurück</button>
-                            <button onClick={goToNextStep} disabled={isNextDisabled} style={{ ...buttonStyle, backgroundColor: selectedRooms.length > 0 ? "#007BFF" : "#ccc", cursor: selectedRooms.length > 0 ? "pointer" : "not-allowed" }}>Weiter</button>
+                            <button onClick={goToPreviousStep} style={buttonStyle}>{t('booking.general.buttons.buttonBack')}</button>
+                            <button onClick={goToNextStep} disabled={isNextDisabled} style={{ ...buttonStyle, backgroundColor: selectedRooms.length > 0 ? "#007BFF" : "#ccc", cursor: selectedRooms.length > 0 ? "pointer" : "not-allowed" }}>{t('booking.general.buttons.buttonContinue')}</button>
                         </div>
                     </div>
                 )}
 
                 {step === 3 && (
                     <div>
-                        <h3>Kontaktdaten</h3>
+                        <h3>{t('booking.step3.contactInformation')}</h3>
 
                         <div className="summary">
                             <h4 onClick={() => setIsPeriodVisible(!isPeriodVisible)} style={{ cursor: "pointer" }}>
-                                Buchungszeitraum {isPeriodVisible ? "▲" : "▼"}
+                                {t('booking.step3.bookingPeriod')} {isPeriodVisible ? "▲" : "▼"}
                             </h4>
                             {isPeriodVisible && (
                                 <p>
-                                    Zeitraum: {`${bookingDates.startDate.toLocaleDateString("de-DE")} - ${bookingDates.endDate.toLocaleDateString("de-DE")}`}<br />
-                                    Dauer: {calculateDateDifference()} Nächte
+                                    {t('booking.step3.period')}: {`${bookingDates.startDate.toLocaleDateString("de-DE")} - ${bookingDates.endDate.toLocaleDateString("de-DE")}`}<br />
+                                    {t('booking.step3.duration')}: {calculateDateDifference()} {t('booking.step3.nights')}
                                 </p>
                             )}
                         </div>
 
                         <div className="summary">
                             <h4 onClick={() => setIsRoomsVisible(!isRoomsVisible)} style={{ cursor: "pointer" }}>
-                                Gewählte Zimmer {isRoomsVisible ? "▲" : "▼"}
+                                {t('booking.step3.selectedRooms')} {isRoomsVisible ? "▲" : "▼"}
                             </h4>
                             {isRoomsVisible &&
                                 selectedRooms.map((room) => (
                                     <div key={room.id}>
-                                        {room.type} - {room.pricePerDay}€/Tag <br />
-                                        Gesamtkosten für {calculateDateDifference()} Nächte: {calculateRoomTotal(room, calculateDateDifference())}€
+                                        {room.type} - {room.pricePerDay}€/{t('booking.step3.night')} <br />
+                                        {t('booking.step3.totalCostsFor')} {calculateDateDifference()} {t('booking.step3.nights')}: {calculateRoomTotal(room, calculateDateDifference())}€
                                     </div>
                                 ))}
                         </div>
 
                         <div className="step-3-form">
                             <label>
-                                Anrede:
+                                {t('booking.step3.salutation')}:
                                 <select value={contactForm.salutation} onChange={(e) => handleContactFormChange("salutation", e.target.value)}>
-                                    <option value="">Bitte auswählen</option>
-                                    <option value="Herr">Herr</option>
-                                    <option value="Frau">Frau</option>
-                                    <option value="Sonstige">Sonstige</option>
+                                    <option value="">{t('booking.step3.selectSalutation')}</option>
+                                    <option value="Herr">{t('booking.step3.mr')}</option>
+                                    <option value="Frau">{t('booking.step3.ms')}</option>
+                                    <option value="Sonstige">{t('booking.step3.other')}</option>
                                 </select>
                             </label>
-                            <label>Vorname:<input type="text" value={contactForm.firstName} onChange={(e) => handleContactFormChange("firstName", e.target.value)} /></label>
-                            <label>Nachname:<input type="text" value={contactForm.lastName} onChange={(e) => handleContactFormChange("lastName", e.target.value)} /></label>
-                            <label>Firma (optional):<input type="text" value={contactForm.company} onChange={(e) => handleContactFormChange("company", e.target.value)} /></label>
+                            <label>{t('booking.step3.firstName')}:<input type="text" value={contactForm.firstName} onChange={(e) => handleContactFormChange("firstName", e.target.value)} /></label>
+                            <label>{t('booking.step3.lastName')}:<input type="text" value={contactForm.lastName} onChange={(e) => handleContactFormChange("lastName", e.target.value)} /></label>
+                            <label>{t('booking.step3.companyOpt')}:<input type="text" value={contactForm.company} onChange={(e) => handleContactFormChange("company", e.target.value)} /></label>
                             <label>
-                                Land:
+                                {t('booking.step3.country')}:
                                 <select value={contactForm.country} onChange={e => handleCountryChange(e.target.value)}>
-                                    <option value="">Bitte auswählen</option>
+                                    <option value="">{t('booking.step3.selectCountry')}</option>
                                     <option value="Deutschland">Deutschland</option>
                                     <option value="Frankreich">Frankreich</option>
                                     <option value="Italien">Italien</option>
@@ -341,69 +343,69 @@ function BookingForm() {
                                     <option value="Schweiz">Schweiz</option>
                                 </select>
                             </label>
-                            <label>Postleitzahl:
+                            <label>{t('booking.step3.postalCode')}:
                                 <input type="text"
                                     value={contactForm.postalCode}
                                     onChange={e => handlePostalCodeChange(e.target.value)}
                                     maxLength="5"
                                 />
-                                {isLoadingCity && <small className="kontakt-info">🔍 Stadt wird gesucht…</small>}
-                                {cityFound && !isLoadingCity && <small className="kontakt-success">✓ Stadt gefunden</small>} </label>
-                            <label>Stadt:<input type="text" readOnly={contactForm.country === "Deutschland"} value={contactForm.city} onChange={(e) => handleContactFormChange("city", e.target.value)} placeholder={contactForm.country === "Deutschland" ? "Automatisch ausgefüllt" : "Bitte manuell eingeben"} /></label>
-                            <label>Straße:<input type="text" value={contactForm.street} onChange={(e) => handleContactFormChange("street", e.target.value)} /></label>
+                                {isLoadingCity && <small className="kontakt-info">🔍 {t('booking.step3.searchingForCity')}</small>}
+                                {cityFound && !isLoadingCity && <small className="kontakt-success">✓ {t('booking.step3.cityFound')}</small>} </label>
+                            <label>{t('booking.step3.city')}:<input type="text" readOnly={contactForm.country === "Deutschland"} value={contactForm.city} onChange={(e) => handleContactFormChange("city", e.target.value)} placeholder={contactForm.country === "Deutschland" ? t('booking.step3.autoFilled') : t('booking.step3.manuallyFilled')} /></label>
+                            <label>{t('booking.step3.street')}:<input type="text" value={contactForm.street} onChange={(e) => handleContactFormChange("street", e.target.value)} /></label>
 
 
-                            <label>Tel./Mobil:<input type="tel" value={contactForm.phone} onChange={(e) => handleContactFormChange("phone", e.target.value)} /></label>
-                            <label>E-Mail:<input type="email" value={contactForm.email} onChange={(e) => handleContactFormChange("email", e.target.value)} required /></label>
+                            <label>{t('booking.step3.mobile')}:<input type="tel" value={contactForm.phone} onChange={(e) => handleContactFormChange("phone", e.target.value)} /></label>
+                            <label>{t('booking.step3.mail')}:<input type="email" value={contactForm.email} onChange={(e) => handleContactFormChange("email", e.target.value)} required /></label>
                         </div>
 
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-                            <button onClick={goToPreviousStep} style={buttonStyle}>Zurück</button>
-                            <button onClick={goToNextStep} disabled={isNextDisabled} style={{ ...buttonStyle, backgroundColor: isNextDisabled ? "#ccc" : "#007BFF", cursor: isNextDisabled ? "not-allowed" : "pointer" }}>Weiter</button>
+                            <button onClick={goToPreviousStep} style={buttonStyle}>{t('booking.general.buttons.buttonBack')}</button>
+                            <button onClick={goToNextStep} disabled={isNextDisabled} style={{ ...buttonStyle, backgroundColor: isNextDisabled ? "#ccc" : "#007BFF", cursor: isNextDisabled ? "not-allowed" : "pointer" }}>{t('booking.general.buttons.buttonContinue')}</button>
                         </div>
                     </div>
                 )}
 
                 {step === 4 && (
                     <div>
-                        <h3>Zusammenfassung</h3>
+                        <h3>{t("booking.step4.summary")}</h3>
                         <div className="summary">
-                            <h4>Buchungszeitraum</h4>
+                            <h4>{t("booking.step4.bookingPeriod")}</h4>
                             <p>
-                                Zeitraum: {`${bookingDates.startDate.toLocaleDateString("de-DE")} - ${bookingDates.endDate.toLocaleDateString("de-DE")}`}<br />
-                                Dauer: {calculateDateDifference()} Nächte
+                                {t("booking.step4.period")}: {`${bookingDates.startDate.toLocaleDateString("de-DE")} - ${bookingDates.endDate.toLocaleDateString("de-DE")}`}<br />
+                                {t("booking.step4.duration")}: {calculateDateDifference()} Nächte
                             </p>
                         </div>
 
                         <div className="summary">
-                            <h4>Gewählte Zimmer</h4>
+                            <h4>{t("booking.step4.selectedRooms")}</h4>
                             {selectedRooms.map((room) => (
                                 <div key={room.id}>
-                                    {room.type} - {room.pricePerDay}€/Tag <br />
-                                    Gesamtkosten für {calculateDateDifference()} Nächte: {calculateRoomTotal(room, calculateDateDifference())}€
+                                    {room.type} - {room.pricePerDay}€/{t("booking.step4.night")} <br />
+                                    {t("booking.step4.totalCostsFor")} {calculateDateDifference()} {t("booking.step4.nights")}: {calculateRoomTotal(room, calculateDateDifference())}€
                                 </div>
                             ))}
-                            <h4>Gesamtkosten: {calculateTotal()}€</h4>
+                            <h4>{t("booking.step4.totalCosts")}: {calculateTotal()}€</h4>
                         </div>
 
                         <div className="summary">
-                            <h4>Kontaktdaten</h4>
+                            <h4>{t("booking.step4.contactInformation")}</h4>
                             <p>
-                                Anrede: {contactForm.salutation} <br />
-                                Vorname: {contactForm.firstName} <br />
-                                Nachname: {contactForm.lastName} <br />
-                                {contactForm.company && <>Firma: {contactForm.company} <br /></>}
-                                Straße: {contactForm.street} <br />
-                                Postleitzahl: {contactForm.postalCode} <br />
-                                Stadt: {contactForm.city} <br />
-                                Land: {contactForm.country} <br />
-                                Tel./Mobil: {contactForm.phone} <br />
-                                E-Mail: {contactForm.email}
+                                {t("booking.step4.salutation")}: {contactForm.salutation} <br />
+                                {t("booking.step4.firstName")}: {contactForm.firstName} <br />
+                                {t("booking.step4.lastName")}: {contactForm.lastName} <br />
+                                {contactForm.company && <>{t("booking.step4.company")}: {contactForm.company} <br /></>}
+                                {t("booking.step4.street")}: {contactForm.street} <br />
+                                {t("booking.step4.postalCode")}: {contactForm.postalCode} <br />
+                                {t("booking.step4.city")}: {contactForm.city} <br />
+                                {t("booking.step4.country")}: {contactForm.country} <br />
+                                {t("booking.step4.mobile")}: {contactForm.phone} <br />
+                                {t("booking.step4.mail")}: {contactForm.email}
                             </p>
                         </div>
 
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-                            <button onClick={goToPreviousStep} style={buttonStyle}>Zurück</button>
+                            <button onClick={goToPreviousStep} style={buttonStyle}>{t("booking.general.buttons.buttonBack")}</button>
                             <button
                                 onClick={submitBooking}
                                 disabled={isSubmitting}
@@ -413,7 +415,7 @@ function BookingForm() {
                                     cursor: isSubmitting ? "not-allowed" : "pointer"
                                 }}
                             >
-                                {isSubmitting ? "Wird versendet..." : "Buchung abschließen"}
+                                {isSubmitting ? t("booking.step4.pendingSending") : t("booking.step4.requestBooking")}
                             </button>
                         </div>
                     </div>
