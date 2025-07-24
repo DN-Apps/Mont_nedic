@@ -118,7 +118,7 @@ function BookingForm() {
             }
             return "";
         } catch (e) {
-            console.error("Fehler bei der Stadtsuche:", e);
+            console.error("Error searching the city:", e);
             return "";
         } finally {
             setIsLoadingCity(false);
@@ -176,7 +176,7 @@ function BookingForm() {
             const result = await response.json();
 
             if (result.success) {
-                alert(t('booking.sending.success'));
+                alert("Booking request sent successfully! You will receive a confirmation email.");
                 // Optional: Formular zurücksetzen oder zu einer Erfolgsseite weiterleiten
                 setStep(1);
                 setBookingDates(null);
@@ -197,14 +197,14 @@ function BookingForm() {
                 alert(t('booking.sending.errorTitle') + result.message);
             }
         } catch (error) {
-            console.error(t('booking.sending.errorTitle'), error);
-            alert(t('booking.sending.error'));
+            console.error(t("Error:"), error);
+            alert(t("An error occurred. Please try again later."));
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    const steps = [t(t('booking.step1.bookingDate')), t('booking.step2.roomSelection'), t('booking.step3.contactInformation'), "Zusammenfassung"];
+    const steps = [t(t('booking.step1.bookingDate')), t('booking.step2.roomSelection'), t('booking.step3.contactInformation'), t('booking.step4.summary')];
 
     return (
         <div>
