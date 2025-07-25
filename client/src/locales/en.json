@@ -80,7 +80,13 @@
   },
   "rooms": {
     "gallery": "Gallery",
-    "floorPlan": "Apartment floor plan"
+    "floorPlan": "Apartment floor plan",
+    "stairs": "Stairs",
+    "hallway": "Hallway",
+    "bath": "Bathroom",
+    "kitchen": "Kitchen",
+    "room": "Room",
+    "livingroom": "Livingroom"
   },
   "booking": {
     "general": {

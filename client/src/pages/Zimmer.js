@@ -11,37 +11,40 @@ import Front from "../assets/home_new.jpeg";
 import "./Zimmer.css";
 
 function Zimmer() {
-
-    // Wir speichern den Index des aktiven Bildes (statt nur das Bild selbst)
     const [activeIndex, setActiveIndex] = useState(null);
     const { t } = useTranslation();
 
-    const points = [
-        { id: 1, x: 180, y: 450, label: "Treppe", image: Treppe },
-        { id: 2, x: 220, y: 250, label: "Flur", image: Flur1 },
-        { id: 3, x: 290, y: 250, label: "Flur", image: Flur2 },
-        { id: 4, x: 250, y: 100, label: "Bad", image: Bad },
-        { id: 5, x: 20, y: 350, label: "Zimmer", image: Zimmer2 },
-        { id: 6, x: 450, y: 100, label: "Küche", image: Kueche },
-        { id: 7, x: 650, y: 100, label: "Zimmer", image: Zimmer1 },
+    // Rohdaten (sprachneutral)
+    const rawPoints = [
+        { id: 1, x: 180, y: 450, labelKey: "rooms.stairs", image: Treppe },
+        { id: 2, x: 220, y: 250, labelKey: "rooms.hallway", image: Flur1 },
+        { id: 3, x: 290, y: 250, labelKey: "rooms.hallway", image: Flur2 },
+        { id: 4, x: 250, y: 100, labelKey: "rooms.bath", image: Bad },
+        { id: 5, x: 20, y: 350, labelKey: "rooms.room", image: Zimmer2 },
+        { id: 6, x: 450, y: 100, labelKey: "rooms.kitchen", image: Kueche },
+        { id: 7, x: 650, y: 100, labelKey: "rooms.room", image: Zimmer1 },
     ];
 
-    // Wenn ein Punkt angeklickt wird, merken wir uns den Index
+    // Sprachabhängige Daten generieren
+    const points = rawPoints.map((p) => ({
+        ...p,
+        label: t(p.labelKey),
+    }));
+
     const handlePointClick = (index) => {
         setActiveIndex(index);
     };
 
-    // Pfeiltasten-Navigation & ESC zum Schließen
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (activeIndex === null) return;
 
             if (e.key === "ArrowRight") {
-                setActiveIndex((prev) => (prev + 1) % points.length); // nächstes Bild
+                setActiveIndex((prev) => (prev + 1) % points.length);
             } else if (e.key === "ArrowLeft") {
-                setActiveIndex((prev) => (prev - 1 + points.length) % points.length); // vorheriges Bild
+                setActiveIndex((prev) => (prev - 1 + points.length) % points.length);
             } else if (e.key === "Escape") {
-                setActiveIndex(null); // schließen
+                setActiveIndex(null);
             }
         };
 
@@ -53,34 +56,34 @@ function Zimmer() {
         <div className="zimmer-container">
             {/* Linke Seite: Grundriss */}
             <div className="grundriss-container">
-                <h2>{t('rooms.floorPlan')}</h2>
+                <h2>{t("rooms.floorPlan")}</h2>
                 <svg
                     width="100%"
                     height="100%"
                     viewBox="-100 -50 900 600"
                     preserveAspectRatio="xMidYMid meet"
                 >
-                    {/* Rechtecke und Beschriftungen */}
+                    {/* Räume als Rechtecke */}
                     <rect x="-80" y="10" width="200" height="210" fill="#e8f5e9" stroke="#81c784" />
-                    <text x="10" y="30" fontSize="12" fill="#1565c0">Zimmer</text>
+                    <text x="10" y="30" fontSize="12" fill="#1565c0">{t("rooms.room")}</text>
 
                     <rect x="130" y="10" width="240" height="140" fill="#e3f2fd" stroke="#90caf9" />
-                    <text x="230" y="30" fontSize="12" fill="#1565c0">Bad</text>
+                    <text x="230" y="30" fontSize="12" fill="#1565c0">{t("rooms.bath")}</text>
 
                     <rect x="380" y="10" width="160" height="140" fill="#e3f2fd" stroke="#90caf9" />
-                    <text x="450" y="30" fontSize="12" fill="#2e7d32">Küche</text>
+                    <text x="450" y="30" fontSize="12" fill="#2e7d32">{t("rooms.kitchen")}</text>
 
                     <rect x="550" y="10" width="230" height="230" fill="#e8f5e9" stroke="#81c784" />
-                    <text x="570" y="30" fontSize="12" fill="#2e7d32">Zimmer</text>
+                    <text x="570" y="30" fontSize="12" fill="#2e7d32">{t("rooms.room")}</text>
 
                     <rect x="-80" y="230" width="200" height="260" fill="#e8f5e9" stroke="#81c784" />
-                    <text x="-70" y="320" fontSize="12" fill="#1565c0">Zimmer</text>
+                    <text x="-70" y="320" fontSize="12" fill="#1565c0">{t("rooms.room")}</text>
 
                     <rect x="130" y="310" width="100" height="180" fill="#fff3e0" stroke="#ffcc80" />
-                    <text x="140" y="330" fontSize="12" fill="#ef6c00">Treppenhaus</text>
+                    <text x="140" y="330" fontSize="12" fill="#ef6c00">{t("rooms.stairs")}</text>
 
                     <rect x="380" y="250" width="400" height="240" fill="#fbe9e7" stroke="#ffab91" />
-                    <text x="550" y="270" fontSize="12" fill="#d84315">Wohnzimmer</text>
+                    <text x="550" y="270" fontSize="12" fill="#d84315">{t("rooms.livingroom")}</text>
 
                     {/* Interaktive Punkte */}
                     {points.map((point, index) => (
@@ -90,7 +93,7 @@ function Zimmer() {
                             cy={point.y}
                             r="20"
                             fill="red"
-                            onClick={() => handlePointClick(index)} // Änderung hier
+                            onClick={() => handlePointClick(index)}
                             style={{ cursor: "pointer" }}
                         />
                     ))}
@@ -99,21 +102,21 @@ function Zimmer() {
 
             {/* Rechte Seite */}
             <div className="rechte-seite">
-                {/* Permanentes Bild */}
+                {/* Bild */}
                 <div className="permanentes-bild">
                     <img src={Front} alt="Front" />
                 </div>
 
                 {/* Galerie */}
                 <div className="galerie-container">
-                    <h2>{t('rooms.gallery')}</h2>
+                    <h2>{t("rooms.gallery")}</h2>
                     <div className="galerie-grid">
                         {points.map((point, index) => (
                             <img
                                 key={point.id}
                                 src={point.image}
                                 alt={point.label}
-                                onClick={() => handlePointClick(index)} // Änderung hier
+                                onClick={() => handlePointClick(index)}
                             />
                         ))}
                     </div>
@@ -123,15 +126,9 @@ function Zimmer() {
             {/* Overlay mit großem Bild */}
             {activeIndex !== null && (
                 <div className="overlay">
-                    {/* ❌ Button zum Schließen */}
-                    <button
-                        className="close-button"
-                        onClick={() => setActiveIndex(null)}
-                    >
+                    <button className="close-button" onClick={() => setActiveIndex(null)}>
                         &#10005;
                     </button>
-
-                    {/* ⬅️ Pfeil links */}
                     <button
                         className="arrow-button left"
                         onClick={(e) => {
@@ -141,14 +138,7 @@ function Zimmer() {
                     >
                         &#8592;
                     </button>
-
-                    {/* 🖼️ Bild */}
-                    <img
-                        src={points[activeIndex].image}
-                        alt="Vergrößertes Bild"
-                    />
-
-                    {/* ➡️ Pfeil rechts */}
+                    <img src={points[activeIndex].image} alt={points[activeIndex].label} />
                     <button
                         className="arrow-button right"
                         onClick={(e) => {
@@ -160,9 +150,6 @@ function Zimmer() {
                     </button>
                 </div>
             )}
-
-
-
         </div>
     );
 }

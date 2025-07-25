@@ -80,7 +80,13 @@
   },
   "rooms": {
     "gallery": "Galerie",
-    "floorPlan": "Wohnungsgrundriss"
+    "floorPlan": "Wohnungsgrundriss",
+    "stairs": "Treppenhaus",
+    "hallway": "Flur",
+    "bath": "Badezimmer",
+    "kitchen": "Küche",
+    "room": "Zimmer",
+    "livingroom": "Wohnzimmer"
   },
   "booking": {
     "general": {

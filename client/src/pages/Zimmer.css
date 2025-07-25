@@ -150,6 +150,9 @@ svg {
     margin-top: 40px;
   }
 
+  .grundriss-container text {
+    font-size: 22px;
+  }
   .grundriss-container svg {
     height: auto;
   }
