@@ -112,6 +112,9 @@
         "success": "Booking request sent successfully! You will receive a confirmation email.",
         "errorTitle": "Error:",
         "error": "An error occurred. Please try again later."
+      },
+      "datePicker": {
+        "bookingPeriod": "Booking Period"
       }
     },
     "step1": {

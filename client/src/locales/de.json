@@ -114,6 +114,9 @@
         "success": "Buchungsanfrage erfolgreich versendet! Sie erhalten eine Bestätigungsmail.",
         "errorTitle": "Fehler:",
         "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+      },
+      "datePicker": {
+        "bookingPeriod": "Buchungszeitraum"
       }
     },
     "step1": {

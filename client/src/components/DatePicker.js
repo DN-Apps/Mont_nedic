@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { DateRange } from "react-date-range";
 import { de } from "date-fns/locale";
 import "react-date-range/dist/styles.css";
@@ -7,6 +8,7 @@ import "./styles.css"
 
 function DatePicker({ selectedDates, setSelectedDates, initiallyOpen = false, readOnly = false }) {
     const [isOpen, setIsOpen] = useState(initiallyOpen);
+    const { t } = useTranslation();
 
     const [dateRange, setDateRange] = useState([
         {
@@ -54,7 +56,7 @@ function DatePicker({ selectedDates, setSelectedDates, initiallyOpen = false, re
                 }}
                 onClick={toggleOpen}
             >
-                <strong>Buchungszeitraum</strong>{" "}
+                <strong>{t("booking.general.datePicker.bookingPeriod")}</strong>{" "}
                 {selectedDates?.startDate && selectedDates?.endDate && (
                     <span>
                         {`(${selectedDates.startDate.toLocaleDateString("de-DE")} - ${selectedDates.endDate.toLocaleDateString("de-DE")})`}

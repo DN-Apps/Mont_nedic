@@ -87,7 +87,8 @@ function LanguageSelector() {
                 isSearchable={false}
                 classNamePrefix="select"
                 styles={customStyles}
-                aria-label="Sprache auswählen"
+                aria-label="select-lang"
+                placeholder="Select language"
             />
         </div>
     );
