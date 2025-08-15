@@ -8,7 +8,7 @@ Stack: Developed with MERN (MySQL, Express, ReactJS, NodeJS)
 Host: Hosted by an dedicated IONOS-Server.
 
 **Live-Demo:** [https://rent.ned-it.de](https://rent.ned-it.de)  
-**GitHub-Repository:** [(https://github.com/DN-Apps/Mont_nedic)]  
+**GitHub-Repository:** (https://github.com/DN-Apps/Mont_nedic)
 
 ---
 
