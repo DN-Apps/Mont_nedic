@@ -7,8 +7,8 @@ The visiter gets a first impression of the accomodation's equipment, how the roo
 Stack: Developed with MERN (MySQL, Express, ReactJS, NodeJS)
 Host: Hosted by an dedicated IONOS-Server.
 
-**Live-Demo:** [https://deine-domain.com](https://deine-domain.com)  
-**GitHub-Repository:** [Link zum Repo]  
+**Live-Demo:** [https://rent.ned-it.de](https://rent.ned-it.de))  
+**GitHub-Repository:** [[Link zum Repo](https://github.com/DN-Apps/Mont_nedic)]  
 
 ---
 
