@@ -54,6 +54,6 @@ Target group: Construction companies & workers, students
 Features: Booking form, media library, easy contact options
 - **Frontend:** ReactJS, [React Router, React Icons, Date-FNS, i18next, React Scripts, ...]
 - **Backend:** Node.js (Express, Cors, bcrypt, body-parser, jsonwebtoken, mysql2, nodemon, nodemailer)
-- **Datenbank:** MySQL (planned)
+- **Database:** MySQL (planned)
 - **Hosting:** IONOS (vServer)
-- **Versionsverwaltung:** GitHub
+- **Version management:** GitHub
