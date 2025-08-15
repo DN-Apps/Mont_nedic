@@ -16,7 +16,6 @@ Host: Hosted by an dedicated IONOS-Server.
 1. [About the project](#about-the-project)
 2. [Features](#features)
 3. [Technologies](#technologies)
-4. [Geplante Features](#geplante-features)
 
 ---
 
