@@ -1,59 +1,121 @@
 # 🚀 Monteurzimmer Nedic
 
-**Short description:**  
-A web-application for providing worker accommodations with modern equipment and simple booking options.
-The visiter gets a first impression of the accomodation's equipment, how the rooms are arranged (floor plan) and how to get in contact with the landlord (contact form, or booking form).
+🌍 README in: [Deutsch](#deutsch) | [English](#english)
 
-Stack: Developed with MERN (MySQL, Express, ReactJS, NodeJS)
-Host: Hosted by an dedicated IONOS-Server.
+---
+
+## Deutsch
+
+### Kurzbeschreibung
+Eine Webanwendung zur Bereitstellung von Monteurunterkünften mit moderner Ausstattung und einfachen Buchungsmöglichkeiten.  
+Besucher erhalten einen ersten Eindruck von der Ausstattung, dem Zimmergrundriss (Floorplan) und können den Vermieter bequem über ein Kontakt- oder Buchungsformular erreichen.
+
+**Technologie-Stack:** MERN (MySQL, Express, ReactJS, NodeJS)  
+**Hosting:** Dedizierter IONOS-Server  
 
 **Live-Demo:** [https://rent.ned-it.de](https://rent.ned-it.de)  
-**GitHub-Repository:** https://github.com/DN-Apps/Mont_nedic
+**GitHub-Repository:** [https://github.com/DN-Apps/Mont_nedic](https://github.com/DN-Apps/Mont_nedic)
 
 ---
 
-## 📑 Subjects
-1. [About the project](#about-the-project)
-2. [Features](#features)
-3. [Technologies](#technologies)
+### 📑 Inhaltsverzeichnis
+1. [Über das Projekt](#über-das-projekt)  
+2. [Funktionen](#funktionen)  
+3. [Technologien](#technologien)  
 
 ---
 
-## About the project
-This Project was devepeloped to be fully in charge of the features, that are neccessary to provide a functional room booking application.
-These rooms are listed on other platforms, where interested customers can send contact mails to the landlord.
-Theese platforms do not provide following features, which this self-developed application does:
-- Floor plan
-- Beautiful slim design
-- Rooms availabilities
-- Multi language features
+### Über das Projekt
+Dieses Projekt wurde entwickelt, um alle wesentlichen Funktionen einer vollwertigen Zimmerbuchungs-Anwendung abzudecken.  
+Die Zimmer sind aktuell auch auf Drittanbieter-Plattformen gelistet, über die Interessenten lediglich Kontaktanfragen an den Vermieter senden können.  
+Diese Plattformen bieten jedoch nicht die folgenden Features, die in dieser Eigenentwicklung umgesetzt sind:
 
+- Grundrissdarstellung  
+- Schlankes, modernes Design  
+- Anzeige der Zimmerverfügbarkeiten  
+- Mehrsprachigkeit  
 
-It is still not fully developed to meet all the possible features, that are crossing my mind.
-Some of these features could be:
-- User area, where companies or regular requestors can have an insight to their requests and further useful information
-- More languages, to cover the main countries the landlord is getting requests from
-
-Dieses Projekt wurde entwickelt, um [Problem/Lösung beschreiben].  
-Besonderes Augenmerk lag auf [z. B. Performance, Skalierbarkeit, Mehrsprachigkeit].
+Das Projekt befindet sich noch in der Weiterentwicklung und soll um zusätzliche Funktionen ergänzt werden, wie zum Beispiel:
+- Einen **Benutzerbereich**, in dem Firmen oder Stammkunden ihre Anfragen und weitere Informationen einsehen können  
+- Unterstützung für **weitere Sprachen**, abgestimmt auf die Hauptländer, aus denen Anfragen eingehen  
 
 ---
 
-## Features
-- 🔍 **Feature 1** – Booking form, that provides the most neccessary information when one is searching for accomodation: Rooms (count), prices (per night/week/month), availability, floor plan  
-- 📅 **Feature 2** – Contact form, where the landlord can be contacted for questions, regardless of chossing a booking period or not.
-- 🌍 **Mehrsprachigkeit** – Multi language support in English or German.  
-- 📱 **Responsive Design** – For Mobile, Tablet and Desktop  
+### Funktionen
+- 🔍 **Buchungsformular** – Ermöglicht die Eingabe aller wichtigen Informationen bei der Suche nach Unterkünften: Zimmeranzahl, Preise (pro Nacht/Woche/Monat), Verfügbarkeit, Grundriss  
+- 📅 **Kontaktformular** – Bietet die Möglichkeit, den Vermieter direkt mit Fragen zu kontaktieren, unabhängig von einer Buchungsanfrage  
+- 🌍 **Mehrsprachigkeit** – Unterstützt Deutsch und Englisch  
+- 📱 **Responsives Design** – Optimiert für mobile Endgeräte, Tablets und Desktops  
 
 ---
 
-## Technologies
+### Technologien
+**Zielgruppe:** Bauunternehmen & Monteure sowie Studierende  
 
-Target group: Construction companies & workers, students
+**Kernfunktionen:** Buchungsformular, Mediathek, einfache Kontaktmöglichkeiten  
 
-Features: Booking form, media library, easy contact options
-- **Frontend:** ReactJS, [React Router, React Icons, Date-FNS, i18next, React Scripts, ...]
-- **Backend:** Node.js (Express, Cors, bcrypt, body-parser, jsonwebtoken, mysql2, nodemon, nodemailer)
-- **Database:** MySQL (planned)
-- **Hosting:** IONOS (vServer)
-- **Version management:** GitHub
+- **Frontend:** ReactJS (React Router, React Icons, Date-FNS, i18next, React Scripts, …)  
+- **Backend:** Node.js (Express, CORS, bcrypt, body-parser, JSON Web Token, mysql2, nodemon, nodemailer)  
+- **Datenbank:** MySQL (geplant)  
+- **Hosting:** IONOS vServer  
+- **Versionsverwaltung:** GitHub  
+
+---
+
+---
+
+## English
+
+### Short Description
+A web application for offering worker accommodations with modern amenities and simple booking options.  
+Visitors get a first impression of the accommodation’s equipment, the room layout (floor plan), and can easily contact the landlord via contact or booking form.
+
+**Stack:** MERN (MySQL, Express, ReactJS, NodeJS)  
+**Host:** Dedicated IONOS server  
+
+**Live-Demo:** [https://rent.ned-it.de](https://rent.ned-it.de)  
+**GitHub Repository:** [https://github.com/DN-Apps/Mont_nedic](https://github.com/DN-Apps/Mont_nedic)
+
+---
+
+### 📑 Table of Contents
+1. [About the Project](#about-the-project)  
+2. [Features](#features)  
+3. [Technologies](#technologies)  
+
+---
+
+### About the Project
+This project was developed to cover all the features required for a fully functional room booking application.  
+Currently, these rooms are also listed on third-party platforms where interested customers can only send contact requests to the landlord.  
+However, those platforms do not provide the following features, which this self-developed application includes:
+
+- Floor plan  
+- Clean, modern design  
+- Room availability overview  
+- Multi-language support  
+
+The project is still under development and will be expanded with additional features, such as:
+- A **user area** where companies or frequent requesters can track their bookings and access useful information  
+- Support for **additional languages**, targeting the main countries from which booking requests are received  
+
+---
+
+### Features
+- 🔍 **Booking Form** – Provides essential information when searching for accommodation: room count, prices (per night/week/month), availability, and floor plan  
+- 📅 **Contact Form** – Allows users to reach out to the landlord with questions, even without selecting a booking period  
+- 🌍 **Multi-language Support** – Available in English and German  
+- 📱 **Responsive Design** – Optimized for mobile, tablet, and desktop devices  
+
+---
+
+### Technologies
+**Target group:** Construction companies, workers, and students  
+
+**Key features:** Booking form, media library, simple contact options  
+
+- **Frontend:** ReactJS (React Router, React Icons, Date-FNS, i18next, React Scripts, …)  
+- **Backend:** Node.js (Express, CORS, bcrypt, body-parser, JSON Web Token, mysql2, nodemon, nodemailer)  
+- **Database:** MySQL (planned)  
+- **Hosting:** IONOS vServer  
+- **Version control:** GitHub  
