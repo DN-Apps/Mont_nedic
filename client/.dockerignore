@@ -1,9 +1,39 @@
-node_modules
-build
-dist
-.git
-.gitignore
-Dockerfile*
-npm-debug.log
-yarn-error.log
-*.local
+# ---------- Stage 1: Build ----------
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Package-Dateien zuerst -> Layer-Caching
+COPY client/package*.json ./
+RUN npm ci
+
+# Restlichen Code kopieren
+COPY client/ ./
+
+# Build-Arg API_PUBLIC_URL → setzt REACT_APP_API_URL im Build
+ARG API_PUBLIC_URL
+ENV REACT_APP_API_URL=$API_PUBLIC_URL
+
+# Production-Build erzeugen
+RUN npm run build
+
+
+# ---------- Stage 2: Runtime ----------
+FROM nginx:1.25-alpine AS runtime
+
+# Eigene nginx.conf bereitstellen
+COPY client/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Build-Output ins Webroot kopieren
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Health-File für Check
+RUN printf 'ok' > /usr/share/nginx/html/health
+
+EXPOSE 80
+
+# Healthcheck → IPv4 (127.0.0.1), um IPv6-Probleme zu vermeiden
+HEALTHCHECK --interval=30s --timeout=5s --retries=5 \
+  CMD wget -qO- http://127.0.0.1/health || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]
