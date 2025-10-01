@@ -1,0 +1,133 @@
+name: QA Build & Deploy (qa-rent)
+
+on:
+  push:
+    branches: [ "qa" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  OWNER: dn-apps
+  IMAGE_CLIENT: ghcr.io/dn-apps/rent-client
+  IMAGE_SERVER: ghcr.io/dn-apps/rent-server
+  # Fallback falls kein Secret gesetzt:
+  API_PUBLIC_URL_QA: ${{ secrets.API_PUBLIC_URL_QA || 'https://qa-rent.ned-it.de/api' }}
+
+jobs:
+  build:
+    name: Build & Push Images (client/server)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [ client, server ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker login (GHCR)
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login $REGISTRY -u "${{ secrets.REGISTRY_USER }}" --password-stdin
+
+      - name: Set image vars
+        id: vars
+        run: |
+          if [[ "${{ matrix.service }}" == "client" ]]; then
+            echo "IMAGE=${IMAGE_CLIENT}" >> $GITHUB_OUTPUT
+            echo "DOCKERFILE=client/Dockerfile" >> $GITHUB_OUTPUT
+            echo "BUILD_CONTEXT=." >> $GITHUB_OUTPUT
+            echo "BUILD_ARGS=--build-arg API_PUBLIC_URL=${API_PUBLIC_URL_QA}" >> $GITHUB_OUTPUT
+          else
+            echo "IMAGE=${IMAGE_SERVER}" >> $GITHUB_OUTPUT
+            echo "DOCKERFILE=server/Dockerfile" >> $GITHUB_OUTPUT
+            echo "BUILD_CONTEXT=." >> $GITHUB_OUTPUT
+            echo "BUILD_ARGS=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build image
+        run: |
+          docker build \
+            -f "${{ steps.vars.outputs.DOCKERFILE }}" \
+            ${{ steps.vars.outputs.BUILD_ARGS }} \
+            -t "${{ steps.vars.outputs.IMAGE }}:qa" \
+            -t "${{ steps.vars.outputs.IMAGE }}:${{ github.sha }}" \
+            "${{ steps.vars.outputs.BUILD_CONTEXT }}"
+
+      - name: Push image (qa & sha)
+        run: |
+          docker push "${{ steps.vars.outputs.IMAGE }}:qa"
+          docker push "${{ steps.vars.outputs.IMAGE }}:${{ github.sha }}"
+
+  deploy:
+    name: Deploy to QA Server
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Validate secrets
+        run: |
+          for s in SSH_HOST SSH_USER SSH_KEY REGISTRY_USER GHCR_TOKEN; do
+            [[ -n "${{ secrets[$s] }}" ]] || { echo "Missing secret: $s"; exit 1; }
+          done
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd /srv/docker/qa/rent/compose
+
+            echo "[1/6] Docker login to GHCR"
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.REGISTRY_USER }}" --password-stdin
+
+            echo "[2/6] Pull latest images"
+            docker compose -f docker-compose.qa.yml pull
+
+            echo "[3/6] Start/Update stack"
+            docker compose -f docker-compose.qa.yml up -d
+
+            echo "[4/6] Wait for health (server & client)"
+            # Warten, bis health=healthy (max. ~2 Min)
+            timeout 120 bash -c '
+              until [ "$(docker inspect -f {{.State.Health.Status}} qa-rent-server)" = "healthy" ] \
+                 && [ "$(docker inspect -f {{.State.Health.Status}} qa-rent-client)" = "healthy" ]; do
+                sleep 3
+              done
+            '
+
+            echo "[5/6] Idempotent DB schema (firmen, benutzerdaten)"
+            # Env aus .env laden, damit mysql-Login klappt
+            set -a; source .env; set +a
+            docker exec qa-rent-db sh -lc "mysql -u\"\$MYSQL_USER\" -p\"\$MYSQL_PASSWORD\" \"\$MYSQL_DATABASE\" -e \"
+              CREATE TABLE IF NOT EXISTS firmen (
+                id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                name VARCHAR(255) NOT NULL,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (id)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+              CREATE TABLE IF NOT EXISTS benutzerdaten (
+                id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                email VARCHAR(320) NOT NULL,
+                display_name VARCHAR(255) NULL,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (id),
+                UNIQUE KEY uniq_email (email)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+            \""
+
+            echo "[6/6] Smoke checks"
+            # Direkt im Container:
+            docker exec qa-rent-server wget -qO- http://127.0.0.1:5000/api/health | tee /tmp/health.json
+
+            # Über NPM/Domain (HTTP; SSL kommt in Schritt 11)
+            curl -fsS -m 10 http://qa-rent.ned-it.de/api/health | tee /tmp/health_ext.json || true
+
+            echo "Deploy done."
