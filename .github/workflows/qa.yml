@@ -104,31 +104,9 @@ jobs:
             set -a; source .env; set +a
             docker exec qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "SELECT 1"'
 
-            echo "[6/8] Apply schema (idempotent) via docker cp + SOURCE"
-            # Schema lokal (auf der VPS) erzeugen
-            cat >/tmp/qa_rent_schema.sql <<'SQL'
-            CREATE TABLE IF NOT EXISTS firmen (
-              id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-              name VARCHAR(255) NOT NULL,
-              created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-              PRIMARY KEY (id)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-            CREATE TABLE IF NOT EXISTS benutzerdaten (
-              id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-              email VARCHAR(320) NOT NULL,
-              display_name VARCHAR(255) NULL,
-              created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-              PRIMARY KEY (id),
-              UNIQUE KEY uniq_email (email)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-            SQL
-
-            # Datei in den DB-Container kopieren
-            docker cp /tmp/qa_rent_schema.sql qa-rent-db:/tmp/qa_rent_schema.sql
-
-            # Schema via SOURCE einspielen (ohne STDIN-Redirection)
-            docker exec qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "SOURCE /tmp/qa_rent_schema.sql;"'
+            echo "[6/8] Apply schema (idempotent)"
+            docker exec qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "CREATE TABLE IF NOT EXISTS firmen (id INT UNSIGNED NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;"'
+            docker exec qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "CREATE TABLE IF NOT EXISTS benutzerdaten (id INT UNSIGNED NOT NULL AUTO_INCREMENT, email VARCHAR(320) NOT NULL, display_name VARCHAR(255) NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id), UNIQUE KEY uniq_email (email)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;"'
 
             echo "[7/8] Wait for health (server -> client)"
             timeout 180 bash -c '
