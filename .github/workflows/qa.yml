@@ -104,7 +104,8 @@ jobs:
             set -a; source .env; set +a
             docker exec qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "SELECT 1"'
 
-            echo "[6/8] Apply schema (idempotent) via here-doc"
+            echo "[6/8] Apply schema (idempotent) via docker cp + SOURCE"
+            # Schema lokal (auf der VPS) erzeugen
             cat >/tmp/qa_rent_schema.sql <<'SQL'
             CREATE TABLE IF NOT EXISTS firmen (
               id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -123,8 +124,11 @@ jobs:
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
             SQL
 
-            # Pipe Datei vom Host als stdin in mysql IM Container
-            docker exec -i qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"' < /tmp/qa_rent_schema.sql
+            # Datei in den DB-Container kopieren
+            docker cp /tmp/qa_rent_schema.sql qa-rent-db:/tmp/qa_rent_schema.sql
+
+            # Schema via SOURCE einspielen (ohne STDIN-Redirection)
+            docker exec qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "SOURCE /tmp/qa_rent_schema.sql;"'
 
             echo "[7/8] Wait for health (server -> client)"
             timeout 180 bash -c '
