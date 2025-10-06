@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Nur package-Dateien zuerst -> Cache
 COPY client/package*.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # Quellcode
 COPY client/ ./
