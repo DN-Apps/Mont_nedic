@@ -83,27 +83,29 @@ jobs:
           script_stop: true
           script: |
             set -euo pipefail
+            trap 'echo ""; echo "---- Last 120 lines of server logs ----"; docker logs --tail=120 qa-rent-server || true; echo "----------------------------------------"' ERR
+
             cd /srv/docker/qa/rent/compose
 
-            echo "[1/6] Docker login to GHCR"
+            echo "[1/8] Docker login to GHCR"
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.REGISTRY_USER }}" --password-stdin
 
-            echo "[2/6] Pull latest images"
+            echo "[2/8] Compose config (debug: images)"
+            docker compose -f docker-compose.qa.yml config >/tmp/compose.rendered.yml
+            sed -n 's/ *image: //p' /tmp/compose.rendered.yml || true
+
+            echo "[3/8] Pull latest images"
             docker compose -f docker-compose.qa.yml pull
 
-            echo "[3/6] Start/Update stack"
+            echo "[4/8] Start/Update stack"
             docker compose -f docker-compose.qa.yml up -d
 
-            echo "[4/6] Wait for health (server & client)"
-            timeout 120 bash -c '
-              until [ "$(docker inspect -f {{.State.Health.Status}} qa-rent-server)" = "healthy" ] \
-                 && [ "$(docker inspect -f {{.State.Health.Status}} qa-rent-client)" = "healthy" ]; do
-                sleep 3
-              done
-            '
-
-            echo "[5/6] Idempotent DB schema (firmen, benutzerdaten)"
+            echo "[5/8] Verify DB credentials"
             set -a; source .env; set +a
+            docker exec qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "SELECT 1"' \
+              || { echo "DB credentials invalid. Check .env MYSQL_*"; exit 1; }
+
+            echo "[6/8] Apply schema (idempotent)"
             docker exec qa-rent-db sh -lc "mysql -u\"\$MYSQL_USER\" -p\"\$MYSQL_PASSWORD\" \"\$MYSQL_DATABASE\" -e \"
               CREATE TABLE IF NOT EXISTS firmen (
                 id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -122,8 +124,19 @@ jobs:
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
             \""
 
-            echo "[6/6] Smoke checks"
-            docker exec qa-rent-server wget -qO- http://127.0.0.1:5000/api/health | tee /tmp/health.json
+            echo "[7/8] Wait for health (server -> client)"
+            # Warten bis Server healthy (max. 3 Min), dann Client
+            timeout 180 bash -c '
+              until [ "$(docker inspect -f {{.State.Health.Status}} qa-rent-server)" = "healthy" ]; do
+                sleep 3
+              done
+              until [ "$(docker inspect -f {{.State.Health.Status}} qa-rent-client)" = "healthy" ]; do
+                sleep 3
+              done
+            '
+
+            echo "[8/8] Smoke checks"
+            docker exec qa-rent-server curl -fsS http://127.0.0.1:5000/api/health | tee /tmp/health.json
             curl -fsS -m 10 http://qa-rent.ned-it.de/api/health | tee /tmp/health_ext.json || true
 
             echo "Deploy done."
