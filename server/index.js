@@ -33,7 +33,7 @@ app.get('/api/health', async (_req, res) => {
 });
 
 // 📩 Kontaktformular-Route
-app.post('/api/contact', async (req, res) => {
+app.post('/contact', async (req, res) => {
   const {
     salutation,
     firstName,
