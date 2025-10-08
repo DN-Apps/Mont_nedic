@@ -18,7 +18,7 @@ env:
   OWNER: dn-apps
   IMAGE_CLIENT: ghcr.io/dn-apps/rent-client
   IMAGE_SERVER: ghcr.io/dn-apps/rent-server
-  # Fallback falls kein Secret gesetzt (ohne /api, damit kein doppeltes /api/api entsteht)
+  # ohne /api, damit kein doppeltes /api/api entsteht
   API_PUBLIC_URL_QA: ${{ secrets.API_PUBLIC_URL_QA || 'https://qa-rent.ned-it.de' }}
 
 jobs:
@@ -44,7 +44,6 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      # Client
       - name: Build & Push client
         if: matrix.service == 'client'
         uses: docker/build-push-action@v6
@@ -61,7 +60,6 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: false
 
-      # Server
       - name: Build & Push server
         if: matrix.service == 'server'
         uses: docker/build-push-action@v6
@@ -98,7 +96,7 @@ jobs:
           script_stop: true
           script: |
             set -euo pipefail
-            trap 'echo ""; echo "---- Last 120 lines of server logs ----"; docker logs --tail=120 qa-rent-server || true; echo "----------------------------------------"' ERR
+            trap 'echo ""; echo "---- Last 120 lines of server logs ----"; docker logs --tail=120 qa-rent-server || true; echo "---- Last 120 lines of client logs ----"; docker logs --tail=120 qa-rent-client || true; echo "----------------------------------------"' ERR
 
             cd /srv/docker/qa/rent/compose
 
@@ -124,11 +122,14 @@ jobs:
             docker exec qa-rent-db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "CREATE TABLE IF NOT EXISTS benutzerdaten (id INT UNSIGNED NOT NULL AUTO_INCREMENT, email VARCHAR(320) NOT NULL, display_name VARCHAR(255) NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id), UNIQUE KEY uniq_email (email)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;"'
 
             echo "[7/8] Wait for health (server -> client)"
-            timeout 180 bash -c '
-              until [ "$(docker inspect -f {{.State.Health.Status}} qa-rent-server)" = "healthy" ]; do
-                sleep 3
-              done
-              until [ "$(docker inspect -f {{.State.Health.Status}} qa-rent-client)" = "healthy" ]; do
+            # robust gegen set -e: interne Schleife ohne 'errexit'
+            timeout 240 bash -c '
+              set +e
+              while true; do
+                s1=$(docker inspect -f "{{.State.Health.Status}}" qa-rent-server 2>/dev/null || echo "unknown")
+                s2=$(docker inspect -f "{{.State.Health.Status}}" qa-rent-client 2>/dev/null || echo "unknown")
+                echo "health => server=${s1}  client=${s2}"
+                if [ "$s1" = "healthy" ] && [ "$s2" = "healthy" ]; then exit 0; fi
                 sleep 3
               done
             '
