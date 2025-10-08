@@ -18,8 +18,8 @@ env:
   OWNER: dn-apps
   IMAGE_CLIENT: ghcr.io/dn-apps/rent-client
   IMAGE_SERVER: ghcr.io/dn-apps/rent-server
-  # Fallback falls kein Secret gesetzt:
-  API_PUBLIC_URL_QA: ${{ secrets.API_PUBLIC_URL_QA || 'https://qa-rent.ned-it.de/api' }}
+  # Fallback falls kein Secret gesetzt (ohne /api, damit kein doppeltes /api/api entsteht)
+  API_PUBLIC_URL_QA: ${{ secrets.API_PUBLIC_URL_QA || 'https://qa-rent.ned-it.de' }}
 
 jobs:
   build:
@@ -34,32 +34,47 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Docker login (GHCR)
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login "$REGISTRY" -u "${{ secrets.REGISTRY_USER }}" --password-stdin
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build & Push
-        run: |
-          if [[ "${{ matrix.service }}" == "client" ]]; then
-            IMAGE="${IMAGE_CLIENT}"
-            DOCKERFILE="client/Dockerfile"
-            BUILD_ARGS=( --build-arg "API_PUBLIC_URL=${API_PUBLIC_URL_QA}" )
-          else
-            IMAGE="${IMAGE_SERVER}"
-            DOCKERFILE="server/Dockerfile"
-            BUILD_ARGS=()
-          fi
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
-          echo "Building $IMAGE using $DOCKERFILE"
-          docker build \
-            -f "$DOCKERFILE" \
-            "${BUILD_ARGS[@]}" \
-            -t "$IMAGE:qa" \
-            -t "$IMAGE:${GITHUB_SHA}" \
-            .
+      # Client
+      - name: Build & Push client
+        if: matrix.service == 'client'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: client/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_CLIENT }}:qa
+            ${{ env.IMAGE_CLIENT }}:${{ github.sha }}
+          build-args: |
+            API_PUBLIC_URL=${{ env.API_PUBLIC_URL_QA }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
 
-          echo "Pushing $IMAGE:qa and $IMAGE:${GITHUB_SHA}"
-          docker push "$IMAGE:qa"
-          docker push "$IMAGE:${GITHUB_SHA}"
+      # Server
+      - name: Build & Push server
+        if: matrix.service == 'server'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: server/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_SERVER }}:qa
+            ${{ env.IMAGE_SERVER }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
 
   deploy:
     name: Deploy to QA Server
@@ -119,7 +134,7 @@ jobs:
             '
 
             echo "[8/8] Smoke checks"
-            docker exec qa-rent-server curl -fsS http://127.0.0.1:5000/api/health | tee /tmp/health.json
+            docker exec qa-rent-server sh -lc 'curl -fsS http://127.0.0.1:${PORT:-5000}/api/health' | tee /tmp/health.json
             curl -fsS -m 10 http://qa-rent.ned-it.de/api/health | tee /tmp/health_ext.json || true
 
             echo "Deploy done."
