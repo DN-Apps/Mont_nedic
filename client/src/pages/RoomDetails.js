@@ -9,7 +9,7 @@ function RoomDetails() {
   const [openRoomIds, setOpenRoomIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_URL = process.env.REACT_APP_ROOMS_API_BASE || 'http://localhost:5001';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
   useEffect(() => {
     const fetchRooms = async () => {
