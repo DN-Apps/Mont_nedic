@@ -82,12 +82,13 @@
   font-size: 0.9em;
 }
 
-.status.frei {
-  color: green;
+.status.occupied {
+  color: red;
+  font-weight: bold;
 }
 
-.status.belegt {
-  color: red;
+.status.available {
+  color: green;
 }
 
 /* Details unterhalb */

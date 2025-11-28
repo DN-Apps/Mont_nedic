@@ -100,7 +100,7 @@
         "buttonBack": "Back"
       },
       "availability": {
-        "free": "Free",
+        "available": "Free",
         "occupied": "occupied"
       },
       "rooms": {

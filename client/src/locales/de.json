@@ -102,7 +102,7 @@
         "requestBooking": "Buchung anfragen"
       },
       "availability": {
-        "free": "Frei",
+        "available": "Frei",
         "occupied": "Belegt"
       },
       "rooms": {

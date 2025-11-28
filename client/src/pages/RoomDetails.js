@@ -1,59 +1,105 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './RoomDetails.css';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
-
 function RoomDetails() {
   const { t } = useTranslation();
-
-  const rooms = [
-    {
-      id: 1,
-      name: t('booking.general.rooms.room1'),
-      status: t('booking.general.availability.free'),
-      details: '2 Einzelbetten, Schreibtisch, Kleiderschrank',
-    },
-    {
-      id: 2,
-      name: t('booking.general.rooms.room2'),
-      status: t('booking.general.availability.occupied'),
-      details: '1 Einzelbett, Schreibtisch, Kleiderschrank',
-    },
-    {
-      id: 3,
-      name: t('booking.general.rooms.room3'),
-      status: t('booking.general.availability.free'),
-      details: '1 Einzelbett, Schreibtisch, Kleiderschrank',
-    },
-  ];
-
+  const [rooms, setRooms] = useState([]);
   const [openRoomIds, setOpenRoomIds] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const API_URL = process.env.REACT_APP_ROOMS_API_BASE || 'http://localhost:5001';
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch(`${API_URL}/api/rooms`);
+        if (!res.ok) {
+          throw new Error(`Server error: ${res.status}`);
+        }
+
+        const data = await res.json();
+        console.log("Rooms API data:", data);
+
+        const mapped = data.map((room) => {
+          const isAvailable = !!room.available;
+          const statusRaw = room.statusRaw || (isAvailable ? 'available' : 'occupied');
+
+          // Übersetzter Name: booking.general.rooms.<room.name>
+          const translationKey = room.name
+            ? `booking.general.rooms.${room.name}`
+            : null;
+
+          const translatedName =
+            translationKey && t(translationKey) !== translationKey
+              ? t(translationKey)
+              : room.name || '';
+
+          return {
+            ...room,
+            statusRaw,
+            status:
+              statusRaw === 'available'
+                ? t('booking.general.availability.available')
+                : t('booking.general.availability.occupied'),
+            displayName: translatedName,
+          };
+        });
+
+        setRooms(mapped);
+      } catch (err) {
+        console.error('Fehler beim Laden der Zimmer:', err);
+        setError(err.message || 'Failed to load rooms');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+  }, [t]);
 
   const toggleDetails = (id) => {
-    if (openRoomIds.includes(id)) {
-      // ID entfernen → schließt die Anzeige
-      setOpenRoomIds(openRoomIds.filter((roomId) => roomId !== id));
-    } else {
-      // ID hinzufügen → öffnet die Anzeige
-      setOpenRoomIds([...openRoomIds, id]);
-    }
+    setOpenRoomIds((prev) =>
+      prev.includes(id) ? prev.filter((roomId) => roomId !== id) : [...prev, id]
+    );
   };
+
+  const priceSource = rooms[0] || {
+    priceNight: 0,
+    priceWeek: 0,
+    priceMonth: 0,
+  };
+
+  if (loading) {
+    return <div className="room-wrapper">{t('common.loading') || 'Lade Zimmer...'}</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="room-wrapper">
+        {t('common.error') || 'Fehler beim Laden der Zimmer:'} {error}
+      </div>
+    );
+  }
 
   return (
     <div className="room-wrapper">
       <div className="pricing-box">
         <div className="price-item">
           <span className="label">{t('booking.general.pricing.1night')}</span>
-          <span className="value">20 €</span>
+          <span className="value">{priceSource.priceNight} €</span>
         </div>
         <div className="price-item">
           <span className="label">{t('booking.general.pricing.1week')}</span>
-          <span className="value">100 €</span>
+          <span className="value">{priceSource.priceWeek} €</span>
         </div>
         <div className="price-item">
           <span className="label">{t('booking.general.pricing.1month')}</span>
-          <span className="value">400 €</span>
+          <span className="value">{priceSource.priceMonth} €</span>
         </div>
       </div>
 
@@ -64,12 +110,16 @@ function RoomDetails() {
           return (
             <div key={room.id} className="room-card">
               <div className="room-header" onClick={() => toggleDetails(room.id)}>
-                <h3>{room.name}</h3>
+                <h3>{room.displayName}</h3>
                 <div className="status-row">
-                  <span className={`status ${room.status}`}>{room.status}</span>
+                  <span className={`status ${room.statusRaw}`}>
+                    {room.status}
+                  </span>
+
                   {isOpen ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
               </div>
+
               {isOpen && (
                 <div className="room-details">
                   <p>{room.details}</p>
