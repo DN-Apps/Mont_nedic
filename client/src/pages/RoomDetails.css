@@ -1,4 +1,8 @@
-/* Gesamter Block */
+/* =======================================================================
+   Hauptcontainer für die gesamte Raumübersicht
+   – zentriert Inhalt
+   – sorgt für angenehme Außenabstände
+   ======================================================================= */
 .room-wrapper {
   display: flex;
   flex-direction: column;
@@ -7,7 +11,12 @@
   margin-top: 40px;
 }
 
-/* Preisbox */
+/* =======================================================================
+   Preisbox (Übernachtung / Woche / Monat)
+   – flexibles Layout
+   – umschließt sich bei kleineren Displays automatisch
+   – leichte Hervorhebung durch Hintergrund & Rahmen
+   ======================================================================= */
 .pricing-box {
   display: flex;
   justify-content: center;
@@ -28,16 +37,20 @@
 
 .price-item .label {
   font-size: 0.9em;
-  color: #555;
+  color: #555; /* Dezente Beschriftung */
 }
 
 .price-item .value {
   font-size: 1.2em;
   font-weight: bold;
-  color: #333;
+  color: #333; /* Preis hervorgehoben */
 }
 
-/* Karten-Container */
+/* =======================================================================
+   Kartencontainer für die Zimmer
+   – flex-wrap: bei kleineren Fenstern umbrechen
+   – gap: angenehme Abstände zwischen Karten
+   ======================================================================= */
 .room-container {
   display: flex;
   gap: 20px;
@@ -47,7 +60,12 @@
   margin-bottom: 40px;
 }
 
-/* Einzelne Karte */
+/* =======================================================================
+   Einzelne Zimmerkarte
+   – klickbar → Accordion
+   – Schatteneffekt bei Hover durch Transition möglich
+   – kompakte, aber übersichtliche Darstellung
+   ======================================================================= */
 .room-card {
   background-color: white;
   border: 1px solid #ccc;
@@ -61,7 +79,7 @@
   justify-content: space-between;
 }
 
-/* Kopf der Karte */
+/* Kopfzeile der Karte: Beinhaltet Name + Status + Pfeilsymbol */
 .room-header {
   display: flex;
   justify-content: space-between;
@@ -69,7 +87,11 @@
   min-height: 50px;
 }
 
-/* Status-Anzeige */
+/* =======================================================================
+   Verfügbarkeitsanzeige
+   – farbliche Hervorhebung abhängig vom Status
+   – uppercase für klarere, kompakte Darstellung
+   ======================================================================= */
 .status-row {
   display: flex;
   align-items: center;
@@ -83,22 +105,26 @@
 }
 
 .status.occupied {
-  color: red;
-  font-weight: bold;
+  color: red; /* Zimmer belegt */
 }
 
 .status.available {
-  color: green;
+  color: green; /* Zimmer frei */
 }
 
-/* Details unterhalb */
+/* Details, die beim Aufklappen sichtbar werden */
 .room-details {
   margin-top: 10px;
   font-size: 0.9em;
   color: #333;
 }
 
-/* Responsive für Mobilgeräte */
+/* =======================================================================
+   Responsives Verhalten auf Mobilgeräten
+   – Karten untereinander statt nebeneinander
+   – Preisliste ebenfalls vertikal
+   – Karten werden breiter für bessere Lesbarkeit
+   ======================================================================= */
 @media (max-width: 768px) {
   .room-container {
     flex-direction: column;

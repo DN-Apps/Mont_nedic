@@ -1,30 +1,49 @@
-/* src/components/ImpressumPopup.css */
+/* ============================================================================
+   Overlay-Hintergrund für das Popup
+   – position:fixed → überdeckt die komplette Seite
+   – darkened background (rgba) → erzeugt klassischen Modal-Overlay
+   – z-index sehr hoch, damit das Popup über allen Inhalten liegt
+   – center per flexbox → Popup erscheint mittig auf jeder Bildschirmgröße
+   ============================================================================ */
 .popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* halbtransparentes Schwarz */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 9999; /* höchste Ebene der gesamten Anwendung */
 }
 
+/* ============================================================================
+   Inhalt des Popups
+   – weißer, abgerundeter Container für eleganten Modal-Look
+   – max-width verhindert übergroßes Fenster auf breiten Displays
+   – Schatten für abgehobenen Effekt
+   ============================================================================ */
 .popup-content {
   background: white;
   padding: 20px 30px;
   border-radius: 8px;
-  max-width: 400px;
+  max-width: 400px; /* gute Lesbarkeit, selbst auf großen Bildschirmen */
   text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); /* Modal-Schatten */
 }
 
+/* Titel ohne oberen Standardabstand */
 .popup-content h2 {
   margin-top: 0;
 }
 
+/* ============================================================================
+   Button zum Schließen
+   – ausreichend Padding für gute Klickfläche
+   – Cursor zeigt Interaktivität
+   – Margin oben sorgt für Abstand zum Text
+   ============================================================================ */
 .popup-content button {
   margin-top: 20px;
   padding: 8px 16px;

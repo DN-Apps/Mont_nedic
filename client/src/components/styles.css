@@ -1,6 +1,10 @@
 /* ========================== */
-/* 🌍 Allgemeine Styles */
+/* 🌍 Allgemeine Styles       */
 /* ========================== */
+
+/* Grundlayout der Seite:
+   - neutrale Schriftart
+   - helles UI für bessere Lesbarkeit */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -8,8 +12,11 @@ body {
   background-color: #f5f5f5;
 }
 
+/* Container der gesamten Buchungsform:
+   - dynamisch in der Breite (responsive)
+   - visuelle Karte durch Schatten + Rundung */
 .bookingform {
-  width: 90%; /* Statt fester Breite */
+  width: 90%; /* flexibel, statt fixer Pixelwerte */
   max-width: 600px;
   margin: 20px auto;
   padding: 20px;
@@ -18,24 +25,30 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Fortschrittsbalken */
+/* ========================== */
+/* ➤ Fortschrittsbalken       */
+/* ========================== */
+
+/* Container für Step-Anzeige */
 .progress-bar {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
+/* Einzelnes Step-Element */
 .progress-bar div {
-  flex: 1;
+  flex: 1; /* Jeder Step gleich breit */
   padding: 10px;
   text-align: center;
   font-size: 14px;
   background-color: #e9ecef;
   color: black;
-  border-right: 2px solid white;
-  transition: 0.3s ease;
+  border-right: 2px solid white; /* Trennlinie */
+  transition: 0.3s ease; /* sanftes Farbübergang */
 }
 
+/* Aktiver Schritt */
 .progress-bar div.active {
   background-color: #007bff;
   color: white;
@@ -43,9 +56,11 @@ body {
 }
 
 /* ========================== */
-/* 📱 Mobile Optimierung */
+/* 📱 Mobile Optimierung      */
 /* ========================== */
+
 @media (max-width: 768px) {
+  /* Buchungsformular: volle Breite, flacheres Design */
   .bookingform {
     width: 85%;
     padding: 15px;
@@ -53,6 +68,7 @@ body {
     box-shadow: none;
   }
 
+  /* Date Range Picker → kleiner skalieren */
   .rdrCalendarWrapper {
     transform: scale(0.95);
     transform-origin: top left;
@@ -84,7 +100,7 @@ body {
     height: 35px;
   }
 
-  /* Fortschrittsbalken kompakter */
+  /* Fortschrittsbalken bei Smartphone vertikal darstellen */
   .progress-bar {
     flex-direction: column;
   }
@@ -96,7 +112,7 @@ body {
     border-bottom: 1px solid white;
   }
 
-  /* Formularfelder */
+  /* Formularfelder besser klickbar auf Mobile */
   input,
   select {
     font-size: 16px;
@@ -110,7 +126,7 @@ body {
     font-weight: bold;
   }
 
-  /* Buttons */
+  /* Buttons über volle Breite */
   button {
     width: 100%;
     font-size: 18px;
@@ -119,7 +135,7 @@ body {
     border-radius: 5px;
   }
 
-  /* Abstand zwischen Elementen */
+  /* Zusätzlicher Abstand zwischen Elementen */
   .summary,
   .step-3-form {
     margin-bottom: 20px;
@@ -127,8 +143,10 @@ body {
 }
 
 /* ========================== */
-/* 📝 Formular-Stile */
+/* 📝 Formular-Stile Step 3   */
 /* ========================== */
+
+/* Step-3 Form: Hintergrund-Bubble für strukturierte Darstellung */
 .step-3-form {
   padding: 15px;
   background-color: #f9f9f9;
@@ -145,6 +163,7 @@ body {
   display: block;
 }
 
+/* Eingabefelder Step 3 */
 .step-3-form input,
 .step-3-form select {
   padding: 8px;
@@ -156,12 +175,14 @@ body {
   transition: border-color 0.3s;
 }
 
+/* Fokus → Highlight */
 .step-3-form input:focus,
 .step-3-form select:focus {
   outline: none;
   border-color: #007bff;
 }
 
+/* Buttoncontainer Step 3 */
 .step-3-form .button-container {
   display: flex;
   justify-content: space-between;
@@ -176,11 +197,13 @@ body {
   cursor: pointer;
 }
 
+/* Primäre Funktion: Weiter */
 .step-3-form button.primary {
   background-color: #007bff;
   color: white;
 }
 
+/* Sekundäre Funktion: Zurück */
 .step-3-form button.secondary {
   background-color: #6c757d;
   color: white;
@@ -192,8 +215,10 @@ body {
 }
 
 /* ========================== */
-/* 📌 Zusammenfassung-Boxen */
+/* 📌 Zusammenfassung-Boxen   */
 /* ========================== */
+
+/* Übergeordnete Zusammenfassung */
 .summary {
   border: 1px solid #ddd;
   padding: 10px;
@@ -202,6 +227,7 @@ body {
   background-color: #f9f9f9;
 }
 
+/* Titel mit Pfeil (aufklappbar) */
 .summary h4 {
   margin: 0 0 10px;
   font-size: 1.1rem;
@@ -215,6 +241,7 @@ body {
   color: #007bff;
 }
 
+/* Einzelne Zeilen der Zusammenfassung */
 .summary div {
   display: flex;
   justify-content: space-between;
@@ -230,17 +257,23 @@ body {
   font-size: 1rem;
 }
 
+/* Verborgen bei geschlossenem Zustand */
 .hidden {
   display: none;
 }
 
-/* Animation für aufklappbare Bereiche */
+/* ========================== */
+/* 🔽 Animation für aufklappbare Bereiche */
+/* ========================== */
+
+/* Basis: Bereich ist geschlossen */
 .expandable {
   transition: max-height 0.3s ease-out;
-  /* overflow: hidden; */
   max-height: 0;
+  /* overflow hidden wäre sinnvoll, aber kommentiert wegen Debugging */
 }
 
+/* Sichtbarer Bereich */
 .expandable.visible {
-  max-height: 1000px; /* Passt sich dem Inhalt an */
+  max-height: 1000px; /* sehr hoch, passt sich dennoch dynamisch an */
 }

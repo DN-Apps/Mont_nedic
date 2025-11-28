@@ -1,7 +1,13 @@
+/* =============================================================================
+   Hauptcontainer des Kontaktformulars
+   – zentriert auf der Seite
+   – angenehme Breite für Lesbarkeit
+   – weiche Box-Optik für moderne UI
+   ============================================================================= */
 .kontakt-container {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px 20px 150px;
+  padding: 20px 20px 150px; /* Extra Platz unten für mobile Tastaturen */
   font-family: "Segoe UI", sans-serif;
   background-color: #f9f9f9;
   border-radius: 12px;
@@ -15,10 +21,13 @@
   text-align: center;
 }
 
+/* =============================================================================
+   Formulargruppen: vertikale Struktur & konsistenter Abstand
+   ============================================================================= */
 .kontakt-form-group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 16px; /* Einheitlicher Abstand zwischen Feldern */
 }
 
 .kontakt-form-group label {
@@ -28,6 +37,12 @@
   font-size: 0.95rem;
 }
 
+/* =============================================================================
+   Inputs, Textareas und Selects: einheitliche Gestaltung
+   – abgerundete Ecken
+   – Fokus-Hervorhebung
+   – responsive Input-Breite
+   ============================================================================= */
 .kontakt-form-group input,
 .kontakt-form-group select,
 .kontakt-form-group textarea {
@@ -36,22 +51,30 @@
   border: 1px solid #ccc;
   font-size: 1rem;
   transition: border 0.3s ease;
-  box-sizing: border-box;
+  box-sizing: border-box; /* verhindert Layout-Sprünge */
 }
 
 .kontakt-form-group input:focus,
 .kontakt-form-group select:focus,
 .kontakt-form-group textarea:focus {
   border-color: #0077cc;
-  outline: none;
+  outline: none; /* verhindert blaues Browser-Outline */
 }
 
+/* =============================================================================
+   Grid für Name / Nachname / PLZ / Stadt
+   – auf Desktop zweispaltig
+   – mobil einspaltig
+   ============================================================================= */
 .kontakt-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
+/* =============================================================================
+   FAQ-Bereich unter dem Formular
+   ============================================================================= */
 .faq-section {
   margin-top: 30px;
 }
@@ -60,6 +83,11 @@
   margin-bottom: 15px;
 }
 
+/* =============================================================================
+   Mobile Anpassungen
+   – Grid einspaltig für bessere Lesbarkeit
+   – zusätzlicher unterer Abstand wegen Mobil-Tastatur
+   ============================================================================= */
 @media screen and (max-width: 600px) {
   .kontakt-grid {
     grid-template-columns: 1fr;
@@ -70,6 +98,11 @@
   }
 }
 
+/* =============================================================================
+   Absende-Button
+   – klare Call-to-Action Farbe
+   – deaktiviert & hover Zustand für besseres Feedback
+   ============================================================================= */
 .kontakt-button {
   padding: 12px;
   background-color: #0077cc;
@@ -90,6 +123,9 @@
   cursor: not-allowed;
 }
 
+/* =============================================================================
+   Info-, Erfolg- und Fehlermeldungen im Formular
+   ============================================================================= */
 .kontakt-info {
   font-size: 0.85rem;
   color: #666;
@@ -103,6 +139,11 @@
   color: red;
 }
 
+/* =============================================================================
+   Captcha-Code Darstellung
+   – monospace für "Kodierungs" Look
+   – abgerundete, kleine Badge ähnlich wie ein Token
+   ============================================================================= */
 .kontakt-captcha-code {
   display: inline-block;
   background-color: #eee;

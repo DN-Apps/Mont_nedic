@@ -7,15 +7,26 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 
 const app = express();
+
+/* -------------------------------------------------------------
+   🌐 CORS-Konfiguration
+   - aktuell: komplett offen (origin: '*')
+   - für Produktion solltest du hier auf deine Domain einschränken
+   ------------------------------------------------------------- */
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type']
 }));
 
+// JSON-Body Parsing für alle POST-Requests
 app.use(bodyParser.json());
 
-// 📩 Kontaktformular-Route
+/* =============================================================
+   📩 KONTAKTFORMULAR – /api/contact
+   - nimmt Kontaktanfragen entgegen
+   - sendet E-Mail an Betreiber + CC an Absender
+   ============================================================= */
 app.post('/api/contact', async (req, res) => {
     const {
         salutation,
@@ -30,18 +41,20 @@ app.post('/api/contact', async (req, res) => {
         message
     } = req.body;
 
+    // Mail-Transporter für Kontakt-Mails (allgemein)
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT),
-        secure: false,
+        secure: false, // falls du TLS/SSL verwendest, hier anpassen
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
         },
-        logger: true,
+        logger: true, // Logging für Debug-Zwecke
         debug: true
     });
 
+    // E-Mail an dich (Betreiber) + CC an den Absender
     const mailOptions = {
         from: `"Kontaktformular" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_USER,
@@ -70,7 +83,14 @@ ${message}
     }
 });
 
-// 📋 Buchungsformular-Route
+/* =============================================================
+   📋 BUCHUNGSFORMULAR – /api/booking
+   - nimmt Buchungsdaten entgegen
+   - berechnet Kosten serverseitig (zusätzliche Validierung)
+   - sendet E-Mail:
+     • an Betreiber (Details & Kosten)
+     • an Kunden (Bestätigung)
+   ============================================================= */
 app.post('/api/booking', async (req, res) => {
     const {
         bookingDates,
@@ -78,6 +98,7 @@ app.post('/api/booking', async (req, res) => {
         contactForm
     } = req.body;
 
+    // Hilfsfunktion: Differenz der Tage zwischen zwei Datumswerten
     const calculateDateDifference = (startDate, endDate) => {
         const start = new Date(startDate);
         const end = new Date(endDate);
@@ -85,6 +106,7 @@ app.post('/api/booking', async (req, res) => {
         return differenceInTime / (1000 * 3600 * 24);
     };
 
+    // Preislogik analog Frontend: 5 Nächte zahlen, 7 bleiben, max. 400 €
     const calculateRoomTotal = (room, nights) => {
         let remainingNights = nights;
         let roomTotal = 0;
@@ -99,8 +121,12 @@ app.post('/api/booking', async (req, res) => {
     };
 
     const nights = calculateDateDifference(bookingDates.startDate, bookingDates.endDate);
-    const totalCost = selectedRooms.reduce((total, room) => total + calculateRoomTotal(room, nights), 0);
+    const totalCost = selectedRooms.reduce(
+        (total, room) => total + calculateRoomTotal(room, nights),
+        0
+    );
 
+    // Separater Mail-Transporter für Buchungen (andere Zugangsdaten möglich)
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT),
@@ -113,6 +139,7 @@ app.post('/api/booking', async (req, res) => {
         debug: true
     });
 
+    // 📧 Mail an Betreiber mit allen Buchungsdetails
     const ownerMailOptions = {
         from: `"Buchungsformular" <${process.env.BOOKING_EMAIL_USER}>`,
         to: process.env.BOOKING_EMAIL_USER,
@@ -142,6 +169,7 @@ app.post('/api/booking', async (req, res) => {
         `
     };
 
+    // 📧 Bestätigungs-Mail an den Kunden
     const customerMailOptions = {
         from: `"Monteurzimmer Buchung" <${process.env.BOOKING_EMAIL_USER}>`,
         to: contactForm.email,
@@ -170,8 +198,10 @@ app.post('/api/booking', async (req, res) => {
     };
 
     try {
+        // Beide Mails verschicken: zuerst an Betreiber, dann an Kunden
         await transporter.sendMail(ownerMailOptions);
         await transporter.sendMail(customerMailOptions);
+
         res.status(200).json({
             success: true,
             message: "Buchungsanfrage wurde erfolgreich versendet!"
@@ -185,18 +215,30 @@ app.post('/api/booking', async (req, res) => {
     }
 });
 
-// 🧑‍💻 Registrierungs-Route
+/* =============================================================
+   🧑‍💻 Registrierung – /register
+   - speichert einen neuen User in der MySQL-Datenbank
+   - Passwort wird mit bcrypt gehasht
+   ============================================================= */
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
+
+    // Passwort-Hash mit 10 Runden Salt
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
+        // Prüfen, ob E-Mail bereits existiert
         const [userExists] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
         if (userExists.length > 0) {
             return res.status(400).json({ message: "Benutzer existiert bereits" });
         }
 
-        await db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword]);
+        // Neuen User anlegen
+        await db.query(
+            "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+            [username, email, hashedPassword]
+        );
+
         res.json({ success: true, message: "Benutzer registriert!" });
     } catch (err) {
         console.error("Fehler bei der Registrierung:", err);
@@ -204,22 +246,30 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// 🔐 Login-Route
+/* =============================================================
+   🔐 Login – /login
+   - prüft, ob E-Mail existiert und Passwort korrekt ist
+   - aktuell ohne JWT / Session – rein als Beispiel
+   ============================================================= */
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+
         if (rows.length === 0) {
             return res.status(400).json({ message: "Benutzer nicht gefunden" });
         }
 
         const user = rows[0];
+
+        // Vergleich Plaintext-Passwort mit Hash
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
             return res.status(401).json({ message: "Falsches Passwort" });
         }
 
+        // Hier könntest du ein JWT ausgeben oder eine Session setzen
         res.json({ success: true, message: "Login erfolgreich!" });
     } catch (err) {
         console.error("Fehler beim Login:", err);
@@ -227,11 +277,18 @@ app.post('/login', async (req, res) => {
     }
 });
 
-//rooms-route
+/* =============================================================
+   🛏️ Zimmer-Route – /api/rooms
+   - ausgelagerter Router für Zimmerverwaltung / Status
+   ============================================================= */
 const roomsRouter = require('./api/rooms');
 app.use('/api/rooms', roomsRouter);
 
-// 🖥️ Server starten
+/* =============================================================
+   🖥️ Serverstart
+   - hört standardmäßig auf Port aus .env oder 5001
+   - 0.0.0.0: erlaubt Zugriff von außen (z.B. Docker/VServer)
+   ============================================================= */
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Server läuft auf http://localhost:${PORT}`);

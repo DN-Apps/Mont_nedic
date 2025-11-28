@@ -1,3 +1,4 @@
+/* Grundreset für Dokumenthöhe, entfernt Standardabstände */
 html,
 body {
   height: 100%;
@@ -5,14 +6,20 @@ body {
   padding: 0;
 }
 
+/* Hauptcontainer der gesamten App
+   - flex column für Layout Header → Content → Footer
+   - min-height 100vh für vollständige Bildschirmhöhe
+   - padding-top für fixierten Header (verhindert Überlappung) */
 .App {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Vollbildhöhe */
+  min-height: 100vh;
   padding-top: 50px; /* Platz für fixierten Header */
-  box-sizing: border-box; /* wichtig, damit padding nicht rausrechnet */
+  box-sizing: border-box; /* verhindert, dass Padding die Gesamtbreite erhöht */
 }
 
+/* Fixierter Header: bleibt beim Scrollen oben kleben
+   - z-index groß, damit er über Menüs/Popups liegt */
 .header {
   background-color: #333;
   color: white;
@@ -20,21 +27,24 @@ body {
   top: 0;
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Mobil: Titel unter Menübutton */
   align-items: center;
   padding: 10px 15px;
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* Haupttitel der Seite (Mehrsprachig via i18n) */
 .site-title {
   font-size: 18px;
   font-weight: bold;
   color: white;
   margin: 5px 0;
-  white-space: nowrap;
+  white-space: nowrap; /* verhindert Zeilenumbruch */
 }
 
+/* Burger-Menü für mobile Navigation
+   - absolut positioniert im Header */
 .burger-menu {
   position: absolute;
   top: 15px;
@@ -43,6 +53,9 @@ body {
   cursor: pointer;
 }
 
+/* Mobiles Menü (ausgeblendet standardmäßig)
+   - flex column: vertikale Liste
+   - erscheint unter dem Header */
 .menu {
   width: 100%;
   display: none;
@@ -52,10 +65,13 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
+/* Sichtbarer Zustand für das mobile Menü */
 .menu.open {
   display: flex;
 }
 
+/* Menülinks (mobile + Desktop)
+   - Flex, um Icon und Text sauber auszurichten */
 .menu-item {
   padding: 6px 0;
   text-decoration: none;
@@ -74,8 +90,11 @@ body {
   background-color: #444;
 }
 
-/* Desktop */
+/* ======================== */
+/* ======= DESKTOP ======== */
+/* ======================== */
 @media (min-width: 769px) {
+  /* Desktop-Header Layout: horizontale Struktur */
   .header {
     flex-direction: row;
     justify-content: space-between;
@@ -89,19 +108,23 @@ body {
     position: static;
   }
 
+  /* Burger-Menü verschwindet, da Desktop eine normale Navigation nutzt */
   .burger-menu {
     display: none;
   }
 
+  /* Desktop-Menü: immer sichtbar
+     - horizontal
+     - Hintergrund transparent (übernimmt Header-Farbe) */
   .menu {
-    display: flex !important;
+    display: flex !important; /* überschreibt mobile display:none */
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
     background-color: transparent;
     max-height: none;
 
-    /* Menü ca. 10% nach links schieben */
+    /* Menü leicht nach links verschieben für optische Zentrierung */
     transform: translateX(-10%);
   }
 
@@ -115,18 +138,24 @@ body {
   }
 }
 
-/* Footer */
+/* ======================== */
+/* ========= FOOTER ======= */
+/* ======================== */
+
+/* Footer bleibt am Ende des Viewports,
+   schrumpft nicht und bleibt "normal" im Dokumentfluss */
 .footer {
-  flex-shrink: 0; /* Footer wird nicht kleiner */
+  flex-shrink: 0;
   text-align: center;
   padding: 15px 0;
   background-color: #222;
   color: white;
-  width: 100%; /* Volle Breite, NICHT 100vw */
-  position: relative; /* Normal im Dokumentfluss */
+  width: 100%; /* vermeidet Scrollbalken (kein 100vw verwenden) */
+  position: relative;
   box-sizing: border-box;
 }
 
+/* Impressum-Link im Footer */
 .impressum-link {
   background: none;
   border: none;
@@ -145,14 +174,18 @@ body {
   text-decoration: none;
 }
 
+/* Hauptbereich wächst und füllt verfügbaren Platz */
 main {
   flex-grow: 1;
 }
 
+/* Hauptinhalt: Flex-Layout ermöglicht
+   strukturiertes Verhalten zwischen Header & Footer */
 .main-content {
-  flex: 1 0 auto; /* Hauptinhalt wächst und nimmt Platz ein */
+  flex: 1 0 auto;
 }
 
+/* Login-Container (falls verwendet) wird mittig gesetzt */
 .login-container {
   margin-left: auto;
   margin-right: auto;

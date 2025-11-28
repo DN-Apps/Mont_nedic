@@ -1,32 +1,51 @@
-/* src/components/PrivacyNotice.css */
+/* ============================================================================
+   Overlay für das Datenschutz-Popup
+   – fixed: überlagert die gesamte Seite
+   – pointer-events: none → verhindert, dass Overlay Klicks blockiert
+     (nur das Popup selbst soll interaktiv sein)
+   – z-index: sehr hoch, damit es über allen Elementen liegt
+   ============================================================================ */
 .popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: transparent;
+  background-color: transparent; /* Transparenter Hintergrund, kein Dim-Effekt */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
-  pointer-events: none; /* ⛔ blockiert nichts mehr */
+  pointer-events: none; /* ❗ Overlay selbst blockiert keine Klicks */
 }
 
+/* ============================================================================
+   Inhalt des Popups
+   – zentriert durch Flex-Parent
+   – pointer-events: auto → nur das Fenster ist klickbar
+   – Schattierung sorgt für "Modal"-Look ohne verdunkelten Hintergrund
+   ============================================================================ */
 .popup-content {
   background: white;
   padding: 20px 30px;
   border-radius: 8px;
   max-width: 400px;
   text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-  pointer-events: auto; /* ✅ Nur das Fenster bleibt klickbar */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); /* sanfter Modal-Schatten */
+  pointer-events: auto; /* Klicks sind auf das Modal erlaubt */
 }
 
+/* Titel des Datenschutz-Popups */
 .popup-content h2 {
-  margin-top: 0;
+  margin-top: 0; /* Browser-Standardabstand entfernen */
 }
 
+/* ============================================================================
+   Akzeptieren-Button
+   – einfache, klare Darstellung
+   – genügend Abstand zum Text
+   – Cursor zeigt Interaktivität
+   ============================================================================ */
 .popup-content button {
   margin-top: 20px;
   padding: 8px 16px;

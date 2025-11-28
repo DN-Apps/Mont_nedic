@@ -6,13 +6,25 @@ import './LanguageSelector.css';
 function LanguageSelector() {
     const { i18n } = useTranslation();
 
-    // Setze Deutsch als Standard beim ersten Render
+    /* ------------------------------------------------------------------
+       Beim ersten Render:
+       - Falls keine Sprache gesetzt ist (selten, aber möglich),
+         wird Deutsch als Standard gesetzt.
+       - Sicherstellung, dass i18n immer einen gültigen Wert hat.
+       ------------------------------------------------------------------ */
     useEffect(() => {
         if (!i18n.language) {
             i18n.changeLanguage('de');
         }
     }, [i18n]);
 
+    /* ------------------------------------------------------------------
+       Liste der verfügbaren Sprachen
+       - jedes Item enthält:
+         value:   Sprachenkürzel für i18n
+         label:   Der angezeigte Name
+         flag:    Länderflagge (FlagCDN → super leichtgewichtig)
+       ------------------------------------------------------------------ */
     const languages = [
         {
             value: 'de',
@@ -26,10 +38,20 @@ function LanguageSelector() {
         }
     ];
 
+    /* ------------------------------------------------------------------
+       Wenn der Benutzer eine Sprache auswählt:
+       - Sprache im i18n-Framework ändern
+       - React-Select liefert das Objekt der Option
+       ------------------------------------------------------------------ */
     const handleChange = (selectedOption) => {
         i18n.changeLanguage(selectedOption.value);
     };
 
+    /* ------------------------------------------------------------------
+       Legt fest, wie jede Option im Select-Menü dargestellt wird:
+       - Flagge + Sprachname
+       - Verhindert uneinheitliches Styling
+       ------------------------------------------------------------------ */
     const formatOptionLabel = ({ label, flag }) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <img
@@ -45,7 +67,12 @@ function LanguageSelector() {
         </div>
     );
 
-    // Custom Styles für react-select
+    /* ------------------------------------------------------------------
+       Custom Styles für react-select:
+       - sorgt dafür, dass der Selector farblich in dein Design passt
+       - entfernt unnötige Umrandungen
+       - verbessert Click-Ziele auf mobilen Geräten
+       ------------------------------------------------------------------ */
     const customStyles = {
         option: (provided, state) => ({
             ...provided,
@@ -74,9 +101,16 @@ function LanguageSelector() {
             ...provided,
             padding: '4px'
         }),
-        indicatorSeparator: () => ({})
+        indicatorSeparator: () => ({}) // Separator entfernen
     };
 
+    /* ------------------------------------------------------------------
+       Komponenten-Render:
+       - React-Select übernimmt Dropdown-Logik
+       - value findet aktuelle Sprache im Array
+       - Suche deaktiviert, da nur 2 Optionen
+       - aria-label für Accessibility
+       ------------------------------------------------------------------ */
     return (
         <div className="lang-sel-container">
             <Select

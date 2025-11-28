@@ -1,3 +1,7 @@
+/* -------------------------------------------------------------
+   Allgemeines Verhalten für alle Bilder: leichte Hover-Animation
+   → sorgt für visuelles Feedback in Galerie & Vorschau
+------------------------------------------------------------- */
 img {
   transition: transform 0.3s, border 0.3s;
 }
@@ -7,6 +11,7 @@ img:hover {
   border-color: #007bff;
 }
 
+/* SVG skalierbar und responsive an Container anpassen */
 svg {
   display: block;
   width: 100%;
@@ -14,25 +19,31 @@ svg {
   max-height: 100%;
 }
 
+/* Container der gesamten Zimmerseite: flex Layout
+   - wrap ermöglicht Umbrechen bei kleineren Displays
+   - flex:1 → Bereich wächst mit Restseite mit
+*/
 .zimmer-container {
   display: flex;
-  /* height: 90vh; ❌ entfernen */
-  flex: 1; /* ✅ Damit es flexibel wächst */
+  flex: 1;
   flex-wrap: wrap;
 }
 
-/* Linke Seite: Grundriss */
+/* -------------------------------------------------------------
+   Linke Seite: GRUNDRISS
+------------------------------------------------------------- */
 .grundriss-container {
   flex: 1;
   border-right: 1px solid #ccc;
   padding: 10px;
-  /* overflow: hidden; */
 }
 
 .grundriss-container h2 {
   text-align: center;
 }
 
+/* SVG im Grundriss soll immer sichtbar bleiben, 
+   unabhängig von Seitenhöhe des Users */
 .grundriss-container svg {
   width: 100%;
   height: 95%;
@@ -40,11 +51,12 @@ svg {
   display: block;
 }
 
-/* Rechte Seite: Galerie */
+/* -------------------------------------------------------------
+   Rechte Seite: GALERIE & dauerhaftes Bild
+------------------------------------------------------------- */
 .galerie-container {
   flex: 1;
   padding: 20px;
-  /* overflow-y: auto; */
   text-align: center;
 }
 
@@ -52,6 +64,7 @@ svg {
   text-align: center;
 }
 
+/* Galeriegrids für Vorschaubilder */
 .galerie-grid {
   display: flex;
   flex-wrap: wrap;
@@ -62,51 +75,59 @@ svg {
 .galerie-grid img {
   width: 100px;
   height: 100px;
-  object-fit: cover;
+  object-fit: cover; /* Verhindert Verzerrung */
   cursor: pointer;
   border-radius: 5px;
 }
 
+/* Rechte Seite strukturiert: permanentes Bild oben,
+   Galerie unten */
 .rechte-seite {
   flex: 1;
   display: flex;
-  flex-direction: column; /* Stapelt das permanente Bild über der Galerie */
+  flex-direction: column;
   align-items: center;
 }
+
 .permanentes-bild {
   width: 100%;
   margin-top: 20px;
   text-align: center;
 }
 
+/* permanentes großes Bild (Hausfront) */
 .permanentes-bild img {
   width: 100%;
-  max-width: 35vw;
+  max-width: 35vw; /* Begrenzung auf Desktop */
   height: auto;
   border-radius: 10px;
 }
 
-/* Vergrößertes Bild im Overlay */
+/* -------------------------------------------------------------
+   OVERLAY: große Bildanzeige beim Klick
+------------------------------------------------------------- */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.85); /* dunkler Hintergrund */
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1000; /* über allem */
 }
 
+/* Großes Bild im Overlay */
 .overlay img {
   max-width: 80%;
   max-height: 80%;
-  object-fit: contain;
+  object-fit: contain; /* keine Verzerrung */
   cursor: pointer;
 }
 
+/* Navigationstasten (links/rechts) */
 .arrow-button {
   position: absolute;
   top: 50%;
@@ -118,7 +139,7 @@ svg {
   cursor: pointer;
   padding: 0 20px;
   z-index: 1001;
-  user-select: none;
+  user-select: none; /* verhindert Markieren beim Klicken */
 }
 
 .arrow-button.left {
@@ -133,12 +154,14 @@ svg {
   color: #ffcc00;
 }
 
-/* ============================= */
-/* 📱 Mobile Ansicht             */
-/* ============================= */
+/* -------------------------------------------------------------
+   MOBILE ANPASSUNGEN
+------------------------------------------------------------- */
+
 @media (max-width: 768px) {
+  /* Mobile: Grundriss und Galerie untereinander */
   .zimmer-container {
-    flex-direction: column; /* Stapelt Grundriss und Galerie untereinander */
+    flex-direction: column;
     height: auto;
   }
 
@@ -150,18 +173,24 @@ svg {
     margin-top: 40px;
   }
 
+  /* Größere Schrift im mobilen SVG für bessere Lesbarkeit */
   .grundriss-container text {
     font-size: 22px;
   }
+
   .grundriss-container svg {
     height: auto;
   }
 
+  /* permanentes Bild etwas größer auf Mobilgeräte */
   .permanentes-bild img {
-    max-width: 80vw; /* Größere Darstellung in der Mobile-Ansicht */
+    max-width: 80vw;
   }
 }
 
+/* -------------------------------------------------------------
+   PULSE-EFFEKT für animierte Markierungen (optional)
+------------------------------------------------------------- */
 @keyframes pulse {
   0% {
     stroke-width: 0;
@@ -180,16 +209,14 @@ svg {
   animation: pulse 1s infinite ease-in-out;
 }
 
-/* ========= Mobile Pfeil-Anpassung ========== */
+/* -------------------------------------------------------------
+   MOBILE Pfeilbuttons im Overlay
+------------------------------------------------------------- */
 @media (max-width: 768px) {
   .arrow-button {
     font-size: 2rem;
     padding: 10px;
-    /*background-color: rgba(0, 0, 0, 0.4);*/
-    border-radius: 50%;
-    /*backdrop-filter: blur(0.5px);*/
-    top: 50%;
-    transform: translateY(-50%);
+    border-radius: 50%; /* runde Touch-Fläche */
   }
 
   .arrow-button.left {
@@ -199,13 +226,11 @@ svg {
   .arrow-button.right {
     margin-right: -150px;
   }
-
-  .arrow-button:hover {
-    color: #ffcc00;
-  }
 }
 
-/* ========= X-Schließen Button ========== */
+/* -------------------------------------------------------------
+   SCHLIESSEN (X) BUTTON
+------------------------------------------------------------- */
 .close-button {
   position: absolute;
   top: 20px;
@@ -222,34 +247,34 @@ svg {
   color: #ff5555;
 }
 
+/* Anpassungen speziell für mobile Overlaydarstellung */
 @media (max-width: 768px) {
-  /* Bild im Overlay soll nicht von Buttons verdeckt werden */
+  /* Bild soll nicht Buttons blockieren */
   .overlay img {
     max-width: 85vw;
     max-height: 70vh;
     z-index: 1000;
-    pointer-events: none; /* wichtig, damit Buttons nicht blockiert werden */
+    pointer-events: none; /* wichtig damit Buttons darüber klickbar sind */
   }
 
-  /* X-Button mobil besser sichtbar oben rechts */
+  /* X oben rechts besser sichtbar + Klickfläche vergrößert */
   .close-button {
     top: 15px;
     margin-right: -150px;
     font-size: 1.8rem;
-    z-index: 1002;
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 50%;
   }
 
+  /* Querformat-Anpassungen (z. B. bei iPhones) */
   @media (orientation: landscape) {
-    /* CSS-Regeln für den Landscape-Modus */
     .permanentes-bild {
       margin-top: 250px;
     }
+
     .galerie-container {
       margin-top: 50px;
     }
-    /*  Weitere Regeln für das Querformat */
   }
 }

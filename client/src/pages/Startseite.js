@@ -1,24 +1,31 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+
+// Bilder der Unterkunft
 import Home from "../assets/home_new.jpeg";
 import Flur from "../assets/flur.jpeg";
-import Flur2 from "../assets/flurRechts.jpeg"
+import Flur2 from "../assets/flurRechts.jpeg";
 import Zimmer1 from "../assets/Zimmer1.jpg";
 import Zimmer2 from "../assets/zimmer2.jpeg";
-import Portrait from "../assets/portrait_transparent.png"
+import Portrait from "../assets/portrait_transparent.png";
+
 import "./Home.css";
 
 function Startseite() {
-
+    // i18n Hook für Textübersetzungen
     const { t } = useTranslation();
+
     return (
         <div className="home-container">
-            {/* Links oben: Begrüßungstext */}
+
+            {/* ========================================================
+               LINKER OBERER BEREICH: Begrüßungstext + Ausstattung
+               ======================================================== */}
             <div className="home-section top-left">
                 <h1>{t('home.welcome.title')}</h1>
-                <h4>
-                    {t('home.welcome.text')}
-                </h4>
+                <h4>{t('home.welcome.text')}</h4>
+
+                {/* Liste der Ausstattungsmerkmale (Icons + Übersetzungstexte) */}
                 <div className="amenities">
                     <div className="amenity">
                         <i className="fas fa-briefcase"></i> {t('home.amenities.desk')}
@@ -80,19 +87,24 @@ function Startseite() {
                 </div>
             </div>
 
-
-            {/* Rechts oben: Diashow */}
+            {/* ========================================================
+               RECHTS OBEN: Diashow (statische Bildrotation in CSS)
+               ======================================================== */}
             <div className="home-section top-right">
                 <div className="slideshow">
+                    {/* Die Slideshow wird rein über CSS animiert */}
                     <img src={Home} alt="Frontansicht" />
                     <img src={Flur} alt="Flur" />
-                    <img src={Flur2} alt="Flur2" />
+                    <img src={Flur2} alt="Flur 2" />
                     <img src={Zimmer1} alt="Zimmer 1" />
-                    <img src={Zimmer2} alt="BZimmer 2" />
+                    <img src={Zimmer2} alt="Zimmer 2" />
                 </div>
             </div>
 
-            {/* Links unten: Google Maps */}
+            {/* ========================================================
+               UNTEN LINKS: Eingebettete Google-Maps Karte
+               - gestureHandling=cooperative → bessere Mobilnutzung
+               ======================================================== */}
             <div className="home-section bottom-left">
                 <iframe
                     title="Google Maps Gundelsheim"
@@ -101,21 +113,25 @@ function Startseite() {
                     height="100%"
                     style={{ border: 0 }}
                     allowFullScreen=""
-                    loading="lazy"
+                    loading="lazy" // bessere Performance
                     referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
             </div>
 
-            {/* Rechts unten: Kontaktdaten */}
+            {/* ========================================================
+               UNTEN RECHTS: Kontaktdaten & Portrait
+               ======================================================== */}
             <div className="home-section bottom-right">
-                <img src={Portrait} width={150} alt="Daniel Nedic" border-radius="50%"></img>
+                {/* Portraitfoto (rund dargestellt via CSS) */}
+                <img src={Portrait} width={150} alt="Daniel Nedic" border-radius="50%" />
+
                 <h2>Kontaktdaten</h2>
                 <p>
                     Daniel Nedic<br />
                     Kirchgasse 8<br />
                     74831 Gundelsheim<br />
                     <a href="mailto:Daniel-nedic@hotmail.de">Daniel-nedic@hotmail.de</a><br />
-                    <a href="tel:01701071715">+49170 1071715</a>
+                    <a href="tel:01701071715">+49 170 1071715</a>
                 </p>
             </div>
         </div>
